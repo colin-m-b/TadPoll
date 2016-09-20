@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
+mongoose.connect('mongo://localhost:3000/test')
 const db = mongoose.connection;
-
 const Host = require('../database/Models/HostModel');
-const poll = require('../database/Models/PollModel');
+const Poll = require('../database/Models/PollModel');
 // verifying
 db.on('error', console.error);
 db.once('open', () => {
@@ -22,40 +22,33 @@ dbMethods.createNewHost = (hostData) => {
 };
 
 
-// dbMethods.verifyHost = function(hostNameInput, hostPasswordInput) {
-//
-//     // fetch user and test password verification
-//     Host.findOne({ username: 'SarahJ' }, function(err, user) {
-//         if (err) throw err;
-//
-//         // test a matching password
-//         user.comparePassword('Password123', function(err, isMatch) {
-//             if (err) throw err;
-//             console.log('Password123:', isMatch); // -> Password123: true
-//         });
-//
-//         // test a failing password
-//         user.comparePassword('123Password', function(err, isMatch) {
-//             if (err) throw err;
-//             console.log('123Password:', isMatch); // -> 123Password: false
-//         });
-//     });
-//   }
+dbMethods.verifyHost = (host) => {
+
+    // fetch user and test password verification
+    Host.findOne({ username: host.name }, 'password', (err, user) => {
+        if (err) throw err;
+
+        // test a matching password
+        user.comparePassword(user.password, (err, isMatch) => {
+            if (err) throw err;
+            res.send(isMatch);
+        });
+    });
+  }
 
 // Mongodb CRUD Operations for POLLS
 
-
 dbMethods.savePollInstance = (pollToSave) => {
-  const pollTemp = new poll(pollToSave);
-  pollTemp.save((err, pollToSave) => {
+  const poll = new Poll(pollToSave);
+  poll.save = (err) => {
     if (err) return console.error('Error! ' + err);
     console.dir('saved!');
-  });
+  };
 }
 
-dbMethods.deletePollInstance = (pollToDelete_id) => {
-  poll.findByIdAndRemove(pollToDelete_id, (err, poll) => {
-    console.log('removed ' + poll);
+dbMethods.deletePollInstance = (pollToDelete) => {
+  Poll.findByIdAndRemove(pollToDelete._id, (err, deledtedPoll) => {
+    console.log('removed ' + deledtedPoll._id);
   });
 };
 
