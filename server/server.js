@@ -18,21 +18,13 @@ app.post('/', (req, res) => {
   console.log('its working yandri!');
 });
 
-app.post('/createPoll', (req, res, next) => {
-  dbMethods.createPollInstance(req.body, next)
-});
+app.post('/createPoll', dbMethods.createPollInstance);
 
-app.get('/getPoll', (req, res, next) => {
-  dbMethods.returnPollInstance(req.body, next)
-});
+app.get('/getPoll/:id', dbMethods.returnPollInstance);
 
-app.post('/updatePoll', (req, res, next) => {
-  dbMethods.updatePollInstance(req.body, next)
-});
+app.put('/updatePoll/:id', dbMethods.updatePollInstance);
 
-app.post('/deletePoll', (req, res, next) => {
-  dbMethods.deletePollInstance(req.body, next)
-});
+app.post('/deletePoll/:id',  dbMethods.deletePollInstance);
 //this starts the webpack-dev-server instead of having to start it manually.
 new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
