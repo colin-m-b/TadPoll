@@ -38,19 +38,39 @@ dbMethods.verifyHost = (host) => {
 
 // Mongodb CRUD Operations for POLLS
 
-dbMethods.savePollInstance = (pollToSave) => {
+dbMethods.createPollInstance = (pollToSave, next) => {
   const poll = new Poll(pollToSave);
   poll.save = (err) => {
     if (err) return console.error('Error! ' + err);
     console.dir('saved!');
   };
-}
+  next();
+};
 
-dbMethods.deletePollInstance = (pollToDelete) => {
+dbMethods.returnPollInstance = (pollToReturn, next) => {
+  Poll.findOne({id: pollToReturn._id}, (err, foundPoll) => {
+    if (err) res.send(err)
+    if (!foundPoll) res.send('poll not found');
+    else res.send(foundPoll);
+  });
+  next();
+};
+
+dbMethods.updatePollInstance = (pollToUpdate, next) => {
+  Poll.fidByIdandUpdate(id, {accessCode: pollToUpdate.accessCode, questions: pollToUpdate.questions}, {new: true}, (err, newPoll) => {
+    res.send(newPoll)
+  });
+  next();
+};
+
+dbMethods.deletePollInstance = (pollToDelete, next) => {
   Poll.findByIdAndRemove(pollToDelete._id, (err, deledtedPoll) => {
     console.log('removed ' + deledtedPoll._id);
   });
+  next();
 };
+
+
 
 mongoose.connect('mongodb://localhost/tadpoll');
 
