@@ -20,9 +20,17 @@ module.exports = {
     module: {
         loaders: [
             {
-                test: /\.jsx?$/,
+                test: /\.js?$/,
                 exclude: /node_modules/,
                 loaders: ['react-hot', 'babel?presets[]=react,presets[]=es2015']
+            },
+            {   test: /\.css$/,
+                exclude: /node_modules/,
+                loaders: ["style", "css", "sass"]
+            },
+            {   test: /\.scss$/,
+                exclude: /node_modules/,
+                loaders: ["style", "css", "sass"]
             }
         ]
     },
