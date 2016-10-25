@@ -5,7 +5,7 @@ const SALT_WORK_FACTOR = 10;
 
 // host is not currently used, kept in app to be used in future features (e.g. authentication)
 const HostSchema = new Schema({
-  username: { type: String, required: true, unique: true },
+  userName: { type: String, required: true, unique: true },
   password: { type: String, required: true },
 });
 

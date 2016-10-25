@@ -6,17 +6,25 @@ const webpack = require('webpack');
 const bodyParser = require('body-parser');
 const WebpackDevServer = require('webpack-dev-server');
 const config = require('../webpack.config');
+const socket = require ('socket.io')
+const fs = require('fs')
 
-app.use(express.static(path.join(__dirname, './../')));
-app.use(bodyParser, {extendedurl: true})
+
+// app.use(express.static(path.join(__dirname, '../build')));
+app.use(express.static(path.join(__dirname, '../public')));
+
+app.use(bodyParser.urlencoded({extended: true}))
+
+// app.get('/', (req, res) => {
+//   const index = fs.readFileSync('./public/index.html')
+//   res.writeHead(200, {"Content-Type": "text/html"})
+//   res.end(index)
+// })
 
 
-app.listen(3000, () => {
-  console.log('Server is listening on port 3000');
-});
-app.post('/', (req, res) => {
-  console.log('its working yandri!');
-});
+app.post('/createHost', dbMethods.createHost)
+
+app.get('/verifyHost', dbMethods.verifyHost)
 
 app.post('/createPoll', dbMethods.createPollInstance);
 
@@ -25,14 +33,19 @@ app.get('/getPoll/:id', dbMethods.returnPollInstance);
 app.put('/updatePoll/:id', dbMethods.updatePollInstance);
 
 app.post('/deletePoll/:id',  dbMethods.deletePollInstance);
+
+app.listen(8080, () => {
+  console.log(__dirname, 'Server is listening on port 8080');
+});
+
 //this starts the webpack-dev-server instead of having to start it manually.
-new WebpackDevServer(webpack(config), {
-  publicPath: config.output.publicPath,
-  hot: true,
-  noInfo: true,
-}).listen(8080, 'localhost', (err, result) => {
-  if (err) {
-    console.log(err)
-  }
-  console.log('running webpack')
-})
+// new WebpackDevServer(webpack(config), {
+//   publicPath: config.output.publicPath,
+//   hot: true,
+//   noInfo: true,
+// }).listen(8080, 'localhost', (err, result) => {
+//   if (err) {
+//     console.log(err)
+//   }
+//   console.log('running webpack')
+// })

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { } from 'react-bootstrap';
+import { Link } from 'react-router'
 
-export default class MakeAccount extends Component {
+export default class Signup extends Component {
   render() {
     return(
 

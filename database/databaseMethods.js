@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongo://localhost:3000/test')
+//mongoose.createConnection('mongodb://localhost:3000/test')
 const db = mongoose.connection;
 const Host = require('../database/Models/HostModel');
 const Poll = require('../database/Models/PollModel');
+const bcrypt = require('bcrypt')
 // verifying
 db.on('error', console.error);
 db.once('open', () => {
@@ -11,9 +12,7 @@ db.once('open', () => {
 
 const dbMethods = {};
 
-
-// Mongodb CRUD Operation for HOSTS
-dbMethods.createNewHost = (hostData) => {
+dbMethods.createHost = (hostData) => {
   const hostTemp = new Host(hostData);
   hostTemp.save((err, hostData) => {
     if (err) return console.error('Error! ' + err);
@@ -22,19 +21,17 @@ dbMethods.createNewHost = (hostData) => {
 };
 
 
-dbMethods.verifyHost = (host) => {
-
-    // fetch user and test password verification
-    Host.findOne({ username: host.name }, 'password', (err, user) => {
-        if (err) throw err;
-
-        // test a matching password
-        user.comparePassword(user.password, (err, isMatch) => {
-            if (err) throw err;
-            res.send(isMatch);
-        });
-    });
-  }
+dbMethods.verifyHost = (req, res) => {
+  // fetch user and test password verification
+  Host.findOne({ username: req.body.userName }, 'password', (err, user) => {
+      if (err) throw err;
+      // test a matching password
+      user.comparePassword(req.body.password, (err, isMatch) => {
+          if (err) throw err;
+          res.send(isMatch);
+      });
+  });
+}
 
 // Mongodb CRUD Operations for POLLS
 

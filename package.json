@@ -11,8 +11,9 @@
   "description": "Your awesome project!",
   "main": "bundle.js",
   "scripts": {
-    "start": "node server/server.js",
-    "test": "babel-tape-runner test/**/*.js | faucet"
+    "start": "npm run start:prod",
+    "start:dev": "webpack-dev-server --inline --content-base public/ --history-api-fallback",
+    "start:prod": "webpack && node server/server.js"
   },
   "keywords": [
     "tape",
@@ -53,9 +54,11 @@
     "babel-preset-react": "^6.0.15",
     "babelify": "^7.2.0",
     "bcrypt": "^0.8.7",
+    "body-parser": "^1.15.2",
     "browserify": "^10.2.4",
     "d3": "^4.2.4",
     "express": "^4.13.3",
+    "jquery": "^3.1.1",
     "mongodb": "^2.2.4",
     "mongoose": "^4.6.0",
     "path": "^0.12.7",
