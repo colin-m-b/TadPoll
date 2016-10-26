@@ -1,19 +1,17 @@
 import React, { Component } from 'react'
 
-export default class CreateAccout extends Component {
+export default class CreateAccount extends Component {
 
-    createAccount(e) {
+  createAccount(e) {
     e.preventDefault()
-    console.log(e)
-    console.log(this.props)
+    console.log('hi')
   }
-
 
     render () {
         return (
             <div>
                 <h3>Create Account</h3>
-                <form onSubmit={this.createAccount}>
+                <form >
                     User Name
                     <input type="text" name="username" placeholder="name" />
                     Email
@@ -22,7 +20,7 @@ export default class CreateAccout extends Component {
                     <input type="password" id="pwd1" name="password" placeholder="password" />
                     Verify password
                     <input type="password" id="pwd2" placeholder="password" />
-                    <button type="submit">Submit</button>
+                    <button onClick={this.createAccount} type="button">Submit</button>
                 </form>
             </div>
         )
