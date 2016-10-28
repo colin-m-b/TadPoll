@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-//mongoose.createConnection('mongodb://localhost:3000/test')
 const db = mongoose.connection;
 const Host = require('../database/Models/HostModel');
 const Poll = require('../database/Models/PollModel');
@@ -12,24 +11,29 @@ db.once('open', () => {
 
 const dbMethods = {};
 
-dbMethods.createHost = (hostData) => {
-  const hostTemp = new Host(hostData);
-  hostTemp.save((err, hostData) => {
+dbMethods.createHost = (req, res) => {
+  const host = new Host(req.body);
+  host.save((err, hostData) => {
     if (err) return console.error('Error! ' + err);
-    console.dir('saved!');
+    res.send('saved!');
   });
 };
 
 
-dbMethods.verifyHost = (req, res) => {
+dbMethods.verifyHost = function(req, res) {
+  console.log('body: ' + req.body.userName)
   // fetch user and test password verification
-  Host.findOne({ username: req.body.userName }, 'password', (err, user) => {
+  Host.findOne({ userName: req.body.userName }, 'password', (err, user) => {
       if (err) throw err;
+      console.log('finding USER' + user)
       // test a matching password
-      user.comparePassword(req.body.password, (err, isMatch) => {
+      if (user) {
+      bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
           if (err) throw err;
           res.send(isMatch);
       });
+      }
+      else res.send(false)
   });
 }
 
@@ -73,6 +77,6 @@ dbMethods.deletePollInstance = (req, res) => {
 
 
 
-mongoose.connect('mongodb://localhost/tadpoll');
+mongoose.connect('mongodb://localhost:27017/tadpoll');
 
 module.exports = dbMethods;

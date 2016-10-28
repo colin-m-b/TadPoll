@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 app.post('/createHost', dbMethods.createHost)
 
-app.get('/verifyHost', dbMethods.verifyHost)
+app.post('/verifyHost', dbMethods.verifyHost)
 
 app.post('/createPoll', dbMethods.createPollInstance);
 

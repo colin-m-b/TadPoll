@@ -7,11 +7,12 @@ const SALT_WORK_FACTOR = 10;
 const HostSchema = new Schema({
   userName: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  email: { type: String, required: false }
 });
 
 const Host = mongoose.model('Host', HostSchema);
 
-HostSchema.pre('save', (next) => {
+HostSchema.pre('save', function(next) {
   const user = this;
   // only hash the password if it has been modified (or is new)
   if (!user.isModified('password')) return next();

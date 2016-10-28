@@ -6,7 +6,9 @@ import { Link } from 'react-router'
 // import PollModel from './database/Models/PollModel'
 
 export default class MakeQuestion extends Component {
-
+  constructor (props) {
+    super(props)
+  }
   // _questionChange(e) {
   //   this.setState({question: e.target.value})
   // }
@@ -34,17 +36,21 @@ export default class MakeQuestion extends Component {
     console.log(this.props.user);
     return(
       <div>
-        <h1> Welcome {this.props.user[0].toUpperCase() + this.props.user.slice(1)}</h1>
-        <label>POLL TITLE</label>
-        <input type="text" className='poll-title'/>
-        <label>Question to ask?</label>
-        <input type='text' className='question'/>
-        <button onClick={this.props.addQuestion} >ADD</button>
-        <button onClick={this.props.createPoll} type="submit">Create Poll</button>
-        <p className='secret-inject'></p>
+        <div>
+          <h1> Welcome {this.props.getAppState.user}</h1>
+          <Link to='/accessPolls/:{user}'>Click here to access previous polls</Link>
+          <hr/>
+        </div>
+          <h3>Create a new poll below</h3>
+          <label>POLL TITLE</label>
+          <input type="text" className='poll-title'/>
+          <label>Question to ask?</label>
+          <input type='text' className='question'/>
+          <button onClick={this.props.addQuestion} >ADD</button>
+          <button onClick={this.props.createPoll} type="submit">Create Poll</button>
+          <p className='secret-inject'></p>
       </div>
       );
 
   }
 }
-// export default MakeQuestion

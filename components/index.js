@@ -16,11 +16,13 @@ export default class Index extends Component{
     render () {
         return (
             <Router history={browserHistory} >
-                <Route path='/' component={App} />
-                <Route path='/login' component={Login} />
-                <Route path='/createAccount' component={CreateAccount} />  
-                <Route path='/answer' component={Answer} />   
-                          
+                <Route path='/' component={App} >
+                <IndexRoute component={Home} />
+                    <Route path='/login' component={Login} />
+                    <Route path='/createAccount' component={CreateAccount} />  
+                    <Route path='/answer' component={Answer} />  
+                    <Route path='/makePoll' component={MakePoll} />
+                </Route>
       
             </Router>
         )

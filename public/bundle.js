@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "79fcb80f4614ce8d50fc"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "62c69b831117d4bbc734"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -654,10 +654,15 @@
 	            return _react2.default.createElement(
 	                _reactRouter.Router,
 	                { history: _reactRouter.browserHistory },
-	                _react2.default.createElement(_reactRouter.Route, { path: '/', component: _App2.default }),
-	                _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _login2.default }),
-	                _react2.default.createElement(_reactRouter.Route, { path: '/createAccount', component: _createAccount2.default }),
-	                _react2.default.createElement(_reactRouter.Route, { path: '/answer', component: _answer2.default })
+	                _react2.default.createElement(
+	                    _reactRouter.Route,
+	                    { path: '/', component: _App2.default },
+	                    _react2.default.createElement(_reactRouter.IndexRoute, { component: _home2.default }),
+	                    _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _login2.default }),
+	                    _react2.default.createElement(_reactRouter.Route, { path: '/createAccount', component: _createAccount2.default }),
+	                    _react2.default.createElement(_reactRouter.Route, { path: '/answer', component: _answer2.default }),
+	                    _react2.default.createElement(_reactRouter.Route, { path: '/makePoll', component: _makeQuestion2.default })
+	                )
 	            );
 	        }
 	    }]);
@@ -26498,13 +26503,13 @@
 	    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
 	    _this.state = {
-	      user: null,
+	      user: "",
 	      pollCode: null
-
 	    };
 	    _this.createAccount = _this.createAccount.bind(_this);
 	    _this.goAdmin = _this.goAdmin.bind(_this);
 	    _this.goAnswer = _this.goAnswer.bind(_this);
+	    _this.login = _this.login.bind(_this);
 	    return _this;
 	  }
 
@@ -26512,13 +26517,28 @@
 	    key: 'createAccount',
 	    value: function createAccount(e) {
 	      e.preventDefault();
-	      console.log('hi');
+	      if ((0, _jquery2.default)("#pwd1").val() !== (0, _jquery2.default)("#pwd2").val()) {
+	        alert("Passwords don't match, please try again");
+	        return;
+	      }
+	      var data = {
+	        userName: (0, _jquery2.default)("#username").val(),
+	        password: (0, _jquery2.default)("#pwd2").val(),
+	        email: (0, _jquery2.default)("#email").val()
+	      };
+	      _jquery2.default.ajax({
+	        url: "http://localhost:8080/createHost",
+	        method: "POST",
+	        data: data,
+	        success: function (x) {
+	          this.setState({ user: data.userName }), _reactRouter.browserHistory.push('/makePoll');
+	        }.bind(this)
+	      });
 	    }
 	  }, {
 	    key: 'goAdmin',
 	    value: function goAdmin(e) {
 	      e.preventDefault();
-	      console.log('create clicked');
 	      _reactRouter.browserHistory.push('/login');
 	    }
 	  }, {
@@ -26528,13 +26548,39 @@
 	      _reactRouter.browserHistory.push('/answer');
 	    }
 	  }, {
+	    key: 'setAppState',
+	    value: function setAppState(obj) {
+	      this.setState.bind(this)(obj);
+	    }
+	  }, {
+	    key: 'login',
+	    value: function login(e) {
+	      e.preventDefault();
+	      var data = {
+	        userName: (0, _jquery2.default)("#userName").val(),
+	        password: (0, _jquery2.default)("#pwd").val()
+	      };
+	      _jquery2.default.ajax({
+	        url: "http://localhost:8080/verifyHost",
+	        method: "POST",
+	        data: data,
+	        success: function (x) {
+	          this.setState({ user: data.userName }), _reactRouter.browserHistory.push('/makePoll');
+	        }.bind(this)
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(_home2.default, { state: this.state, createAccount: this.createAccount, goAdmin: this.goAdmin, goAnswer: this.goAnswer }),
-	        this.props.children
+	        _react2.default.cloneElement(this.props.children, {
+	          getAppState: this.state,
+	          setAppState: this.setAppState,
+	          goAdmin: this.goAdmin,
+	          createAccount: this.createAccount,
+	          login: this.login })
 	      );
 	    }
 	  }]);
@@ -36876,15 +36922,16 @@
 	var Login = function (_Component) {
 	  _inherits(Login, _Component);
 
-	  function Login() {
+	  function Login(props) {
 	    _classCallCheck(this, Login);
 
-	    return _possibleConstructorReturn(this, (Login.__proto__ || Object.getPrototypeOf(Login)).apply(this, arguments));
+	    return _possibleConstructorReturn(this, (Login.__proto__ || Object.getPrototypeOf(Login)).call(this, props));
 	  }
 
 	  _createClass(Login, [{
 	    key: 'render',
 	    value: function render() {
+	      console.log(this.props.login);
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'container row' },
@@ -36901,7 +36948,7 @@
 	              'Username'
 	            )
 	          ),
-	          _react2.default.createElement('input', { type: 'text', placeholder: 'user name', name: 'name', required: true }),
+	          _react2.default.createElement('input', { type: 'text', placeholder: 'user name', id: 'userName', required: true }),
 	          _react2.default.createElement(
 	            'label',
 	            null,
@@ -36911,10 +36958,10 @@
 	              'Password'
 	            )
 	          ),
-	          _react2.default.createElement('input', { type: 'password', placeholder: 'password', name: 'psw', required: true }),
+	          _react2.default.createElement('input', { type: 'password', placeholder: 'password', id: 'pwd', required: true }),
 	          _react2.default.createElement(
 	            'button',
-	            { onClick: this.props.login, type: 'submit' },
+	            { onClick: this.props.login, type: 'button' },
 	            'Login'
 	          )
 	        ),
@@ -55886,30 +55933,27 @@
 	var MakeQuestion = function (_Component) {
 	  _inherits(MakeQuestion, _Component);
 
-	  function MakeQuestion() {
+	  function MakeQuestion(props) {
 	    _classCallCheck(this, MakeQuestion);
 
-	    return _possibleConstructorReturn(this, (MakeQuestion.__proto__ || Object.getPrototypeOf(MakeQuestion)).apply(this, arguments));
+	    return _possibleConstructorReturn(this, (MakeQuestion.__proto__ || Object.getPrototypeOf(MakeQuestion)).call(this, props));
 	  }
+	  // _questionChange(e) {
+	  //   this.setState({question: e.target.value})
+	  // }
+
+	  // _titleChange(e) {
+	  //   this.setState({title: e.target.value})
+	  // }
+
+	  // _createQuestion() {
+	  //   return {title: this.state.title,
+	  //     question: this.state.question,
+	  //   };
+	  // }
 
 	  _createClass(MakeQuestion, [{
 	    key: 'render',
-
-
-	    // _questionChange(e) {
-	    //   this.setState({question: e.target.value})
-	    // }
-
-	    // _titleChange(e) {
-	    //   this.setState({title: e.target.value})
-	    // }
-
-	    // _createQuestion() {
-	    //   return {title: this.state.title,
-	    //     question: this.state.question,
-	    //   };
-	    // }
-
 	    value: function render() {
 	      // return (
 	      //   <div className="question-div">
@@ -55925,10 +55969,25 @@
 	        'div',
 	        null,
 	        _react2.default.createElement(
-	          'h1',
+	          'div',
 	          null,
-	          ' Welcome ',
-	          this.props.user[0].toUpperCase() + this.props.user.slice(1)
+	          _react2.default.createElement(
+	            'h1',
+	            null,
+	            ' Welcome ',
+	            this.props.getAppState.user
+	          ),
+	          _react2.default.createElement(
+	            _reactRouter.Link,
+	            { to: '/accessPolls/:{user}' },
+	            'Click here to access previous polls'
+	          ),
+	          _react2.default.createElement('hr', null)
+	        ),
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          'Create a new poll below'
 	        ),
 	        _react2.default.createElement(
 	          'label',
@@ -55959,8 +56018,6 @@
 
 	  return MakeQuestion;
 	}(_react.Component);
-	// export default MakeQuestion
-
 
 	exports.default = MakeQuestion;
 
@@ -56039,7 +56096,7 @@
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(2), RootInstanceProvider = __webpack_require__(10), ReactMount = __webpack_require__(12), React = __webpack_require__(65); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -56062,44 +56119,38 @@
 	var CreateAccount = function (_Component) {
 	    _inherits(CreateAccount, _Component);
 
-	    function CreateAccount() {
+	    function CreateAccount(props) {
 	        _classCallCheck(this, CreateAccount);
 
-	        return _possibleConstructorReturn(this, (CreateAccount.__proto__ || Object.getPrototypeOf(CreateAccount)).apply(this, arguments));
+	        return _possibleConstructorReturn(this, (CreateAccount.__proto__ || Object.getPrototypeOf(CreateAccount)).call(this, props));
 	    }
 
 	    _createClass(CreateAccount, [{
-	        key: 'createAccount',
-	        value: function createAccount(e) {
-	            e.preventDefault();
-	            console.log('hi');
-	        }
-	    }, {
-	        key: 'render',
+	        key: "render",
 	        value: function render() {
 	            return _react2.default.createElement(
-	                'div',
+	                "div",
 	                null,
 	                _react2.default.createElement(
-	                    'h3',
+	                    "h3",
 	                    null,
-	                    'Create Account'
+	                    "Create Account"
 	                ),
 	                _react2.default.createElement(
-	                    'form',
+	                    "form",
 	                    null,
-	                    'User Name',
-	                    _react2.default.createElement('input', { type: 'text', name: 'username', placeholder: 'name' }),
-	                    'Email',
-	                    _react2.default.createElement('input', { type: 'email', name: 'email', placeholder: 'email' }),
-	                    'Password',
-	                    _react2.default.createElement('input', { type: 'password', id: 'pwd1', name: 'password', placeholder: 'password' }),
-	                    'Verify password',
-	                    _react2.default.createElement('input', { type: 'password', id: 'pwd2', placeholder: 'password' }),
+	                    "User Name",
+	                    _react2.default.createElement("input", { type: "text", id: "username", placeholder: "name" }),
+	                    "Email",
+	                    _react2.default.createElement("input", { type: "email", id: "email", placeholder: "email" }),
+	                    "Password",
+	                    _react2.default.createElement("input", { type: "password", id: "pwd1", name: "password", placeholder: "password" }),
+	                    "Verify password",
+	                    _react2.default.createElement("input", { type: "password", id: "pwd2", placeholder: "password" }),
 	                    _react2.default.createElement(
-	                        'button',
-	                        { onClick: this.createAccount, type: 'button' },
-	                        'Submit'
+	                        "button",
+	                        { onClick: this.props.createAccount, type: "button" },
+	                        "Submit"
 	                    )
 	                )
 	            );
