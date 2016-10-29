@@ -10,11 +10,19 @@ export default class App extends Component {
     this.state = {
       user: "",
       pollCode: null,
+      pollTitle: "",
+      questions: [],
+      quesNum: 1,
+      newFunc: function() {
+        console.log('new func')
+      }
 }
     this.createAccount = this.createAccount.bind(this)
     this.goAdmin = this.goAdmin.bind(this)
     this.goAnswer = this.goAnswer.bind(this)
     this.login = this.login.bind(this)
+    this.setAppState = this.setAppState.bind(this)
+    this.addQuestion = this.addQuestion.bind(this)
   }
 
   createAccount(e) {
@@ -70,6 +78,22 @@ export default class App extends Component {
     })
   }
 
+  addQuestion(e) {
+    let questions = this.state.questions
+    let answers = []
+    $(".answer").each(function(i) {
+      if ($(this).val()) answers.push($(this).val())
+    })
+    questions.push({
+      question: $("#question").val(),
+      answers: answers
+    })
+    this.setAppState({
+      questions: questions,
+      quesNum: questions.length + 1
+    })
+    alert('Question added!')
+  }
 
   render() {
     return (
@@ -79,6 +103,7 @@ export default class App extends Component {
         setAppState: this.setAppState, 
         goAdmin: this.goAdmin, 
         createAccount: this.createAccount,
+        addQuestion: this.addQuestion,
         login: this.login} ) }
       </div>
     )

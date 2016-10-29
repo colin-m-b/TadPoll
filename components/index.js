@@ -5,8 +5,8 @@ import App from './App';
 import Login from './login';
 import Signup from './signup';
 import Home from './home'
-import MakePoll from './makeQuestion'
-import Answer from './answer'
+import BuildPoll from './BuildPoll'
+import AnswerPage from './answerPage'
 import CreateAccount from './createAccount'
 
 export default class Index extends Component{
@@ -19,9 +19,9 @@ export default class Index extends Component{
                 <Route path='/' component={App} >
                 <IndexRoute component={Home} />
                     <Route path='/login' component={Login} />
+                    <Route path='/answer' component={AnswerPage} />  
                     <Route path='/createAccount' component={CreateAccount} />  
-                    <Route path='/answer' component={Answer} />  
-                    <Route path='/makePoll' component={MakePoll} />
+                    <Route path='/makePoll' component={BuildPoll} />
                 </Route>
       
             </Router>

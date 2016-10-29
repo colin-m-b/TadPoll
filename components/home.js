@@ -1,18 +1,19 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
-import { browserHistory } from 'react-router'
+import React, { Component } from 'react'
+import { render } from 'react-dom'
+import { Link, browserHistory } from 'react-router'
 import login from './login'
 
 export default class Home extends Component {
+    constructor(props) {
+        super(props)
+    }
 
-    render(){
-        console.log(this.props.createAccount)
+    render() {
         return (
             <div>
-                <button type='submit' onClick={this.props.goAdmin}>Click here to create poll</button>
-                <button type='submit' onClick={this.props.goAnswer}>Click here to answer poll</button>
-                
+                <Link to="/login">Click here to create poll</Link>
+                <Link to="/answer">Click here to answer poll</Link>
             </div>
         )
-    }   
-}
+    }
+}   
