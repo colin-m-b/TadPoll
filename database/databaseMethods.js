@@ -39,35 +39,43 @@ dbMethods.verifyHost = function(req, res) {
 
 // Mongodb CRUD Operations for POLLS
 
-dbMethods.createPollInstance = (req, res) => {
+
+
+dbMethods.savePoll= function(req, res) {
+  const pollStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+  let pollCode = ''
+    for (let i = 0; i < 4; i++) {
+      let pos = Math.floor(Math.random() * this.state.codeBuilder.length)
+      pollCode += this.state.codeBuilder[pos]
+    }
   const poll = new Poll({
-    hostOwner: pollToSave.userName,
-    accessCode: pollToSave.code,
-    questions: pollToSave.questions,
+    hostOwner: req.body.userName,
+    _id: pollCode,
+    questions: req.body.questions,
     created_at: Date.now()
   });
-  poll.save = (err) => {
+  poll.save = function(err) {
     if (err) return console.error('Error! ' + err);
     res.send(poll._id);
   };
 };
 
-dbMethods.returnPollInstance = (req, res) => {
-  Poll.findOne({id: req.params.id}, (err, foundPoll) => {
+dbMethods.returnPollInstance = function(req, res) {
+  Poll.findOne({_id: req.params.id}, (err, foundPoll) => {
     if (err) res.send(err)
     if (!foundPoll) res.send('poll not found');
     else res.send(foundPoll);
   });
 };
 
-dbMethods.updatePollInstance = (req, res) => {
+dbMethods.updatePollInstance = function(req, res) {
   const id = req.params.id;
-  Poll.fidByIdandUpdate(id, {accessCode: req.body.accessCode, questions: req.body.questions}, {new: true}, (err, newPoll) => {
+  Poll.fidByIdandUpdate({_id: id}, {accessCode: req.body.accessCode, questions: req.body.questions}, {new: true}, (err, newPoll) => {
     res.send(newPoll)
   });
 };
 
-dbMethods.deletePollInstance = (req, res) => {
+dbMethods.deletePollInstance = function(req, res) {
   const id = req.params.id;
   Poll.findByIdAndRemove(id, (err, deletedPoll) => {
     if (err) res.send(err);

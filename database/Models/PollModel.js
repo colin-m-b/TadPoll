@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const pollSchema = new Schema({
-  hostOwner: String,
-  accessCode: String,
+  _id: String,
+  userName: String,
   questions: Array,
   created_at: Date,
 });

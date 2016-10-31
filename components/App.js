@@ -9,21 +9,42 @@ export default class App extends Component {
     super(props)
     this.state = {
       user: "",
-      pollCode: null,
+      pollCode: "",
       pollTitle: "",
       questions: [],
       quesNum: 1,
-      newFunc: function() {
-        console.log('new func')
-      }
-}
+      codeBuilder: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
+      codeArr: []
+    }
     this.createAccount = this.createAccount.bind(this)
     this.goAdmin = this.goAdmin.bind(this)
     this.goAnswer = this.goAnswer.bind(this)
     this.login = this.login.bind(this)
     this.setAppState = this.setAppState.bind(this)
     this.addQuestion = this.addQuestion.bind(this)
+    this.savePoll = this.savePoll.bind(this)
+    this.genCode = this.genCode.bind(this)
   }
+
+  savePoll(e) {
+    e.preventDefault()
+    let data = {
+      userName: this.getAppState.user,
+      pollTitle: this.getAppState.pollTitle,
+      questions: this.getAppState.questions,
+      pollCode: this.getAppState.pollCode
+    }
+    $.ajax({
+      url: "http://localhost:8080/savePoll",
+      method: post,
+      data: data,
+      success: function(x) {
+        alert('poll saved')
+      }
+    })
+  }
+
+
 
   createAccount(e) {
     e.preventDefault()
@@ -93,6 +114,7 @@ export default class App extends Component {
       quesNum: questions.length + 1
     })
     alert('Question added!')
+    if (questions.length + 1 === 11) $("#addQuestion").prop("disabled", true)
   }
 
   render() {
@@ -104,6 +126,7 @@ export default class App extends Component {
         goAdmin: this.goAdmin, 
         createAccount: this.createAccount,
         addQuestion: this.addQuestion,
+        savePoll: this.savePoll,
         login: this.login} ) }
       </div>
     )

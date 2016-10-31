@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "e3b5f0d566ad419b6165"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "a6d840edd107deb29add"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -26518,10 +26518,14 @@
 	    _this.login = _this.login.bind(_this);
 	    _this.setAppState = _this.setAppState.bind(_this);
 	    _this.addQuestion = _this.addQuestion.bind(_this);
+	    _this.savePoll = _this.savePoll.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(App, [{
+	    key: 'savePoll',
+	    value: function savePoll() {}
+	  }, {
 	    key: 'createAccount',
 	    value: function createAccount(e) {
 	      e.preventDefault();
@@ -26594,6 +26598,7 @@
 	        quesNum: questions.length + 1
 	      });
 	      alert('Question added!');
+	      if (questions.length + 1 === 2) (0, _jquery2.default)("#addQuestion").prop("disabled", true);
 	    }
 	  }, {
 	    key: 'render',
@@ -56153,14 +56158,14 @@
 	          answers,
 	          _react2.default.createElement(
 	            'button',
-	            { type: 'reset', onClick: this.props.addQuestion },
+	            { type: 'reset', id: 'addQuestion', onClick: this.props.addQuestion },
 	            'Add question to poll'
 	          )
 	        ),
 	        _react2.default.createElement(
 	          'button',
-	          { type: 'reset', value: 'Reset', onClick: this.showState },
-	          'Show State'
+	          { type: 'reset', value: 'Reset', onClick: this.props.savePoll },
+	          'Save poll'
 	        )
 	      );
 	    }

@@ -17,12 +17,10 @@ export default class MakeQuestion extends Component {
     })
   }
 
-  componentDidMount() {
-    console.log(this.props.getAppState)
-  }
 
   saveTitle(e) {
     e.preventDefault()
+    let code = this.genCode()
     this.props.setAppState({
       pollTitle: $("#pollTitle").val(),
       showQuestion: true
@@ -34,7 +32,6 @@ export default class MakeQuestion extends Component {
     let data = {
       userName: this.state.user,
       pollTitle: this.state.pollTitle || $("#pollTitle").val(),
-      
     }
   }
 
