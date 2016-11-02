@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "a6d840edd107deb29add"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "d585a8a3567e0cf1a06b"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -623,11 +623,11 @@
 
 	var _BuildPoll2 = _interopRequireDefault(_BuildPoll);
 
-	var _answerPage = __webpack_require__(495);
+	var _answerPage = __webpack_require__(496);
 
 	var _answerPage2 = _interopRequireDefault(_answerPage);
 
-	var _createAccount = __webpack_require__(496);
+	var _createAccount = __webpack_require__(497);
 
 	var _createAccount2 = _interopRequireDefault(_createAccount);
 
@@ -26504,13 +26504,13 @@
 
 	    _this.state = {
 	      user: "",
-	      pollCode: null,
+	      pollCode: "",
 	      pollTitle: "",
 	      questions: [],
 	      quesNum: 1,
-	      newFunc: function newFunc() {
-	        console.log('new func');
-	      }
+	      codeBuilder: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
+	      codeArr: [],
+	      showCreatePollInput: true
 	    };
 	    _this.createAccount = _this.createAccount.bind(_this);
 	    _this.goAdmin = _this.goAdmin.bind(_this);
@@ -26519,12 +26519,29 @@
 	    _this.setAppState = _this.setAppState.bind(_this);
 	    _this.addQuestion = _this.addQuestion.bind(_this);
 	    _this.savePoll = _this.savePoll.bind(_this);
+	    //this.genCode = this.genCode.bind(this)
 	    return _this;
 	  }
 
 	  _createClass(App, [{
 	    key: 'savePoll',
-	    value: function savePoll() {}
+	    value: function savePoll(e) {
+	      e.preventDefault();
+	      var data = {
+	        userName: this.getAppState.user,
+	        pollTitle: this.getAppState.pollTitle,
+	        questions: this.getAppState.questions,
+	        pollCode: this.getAppState.pollCode
+	      };
+	      _jquery2.default.ajax({
+	        url: "http://localhost:8080/savePoll",
+	        method: post,
+	        data: data,
+	        success: function success(x) {
+	          alert('poll saved');
+	        }
+	      });
+	    }
 	  }, {
 	    key: 'createAccount',
 	    value: function createAccount(e) {
@@ -26598,7 +26615,7 @@
 	        quesNum: questions.length + 1
 	      });
 	      alert('Question added!');
-	      if (questions.length + 1 === 2) (0, _jquery2.default)("#addQuestion").prop("disabled", true);
+	      if (questions.length + 1 === 11) (0, _jquery2.default)("#addQuestion").prop("disabled", true);
 	    }
 	  }, {
 	    key: 'render',
@@ -26612,6 +26629,7 @@
 	          goAdmin: this.goAdmin,
 	          createAccount: this.createAccount,
 	          addQuestion: this.addQuestion,
+	          savePoll: this.savePoll,
 	          login: this.login })
 	      );
 	    }
@@ -55958,6 +55976,10 @@
 
 	var _question2 = _interopRequireDefault(_question);
 
+	var _pollinput = __webpack_require__(495);
+
+	var _pollinput2 = _interopRequireDefault(_pollinput);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -55972,10 +55994,7 @@
 	  function MakeQuestion(props) {
 	    _classCallCheck(this, MakeQuestion);
 
-	    var _this = _possibleConstructorReturn(this, (MakeQuestion.__proto__ || Object.getPrototypeOf(MakeQuestion)).call(this, props));
-
-	    _this.saveTitle = _this.saveTitle.bind(_this);
-	    return _this;
+	    return _possibleConstructorReturn(this, (MakeQuestion.__proto__ || Object.getPrototypeOf(MakeQuestion)).call(this, props));
 	  }
 
 	  _createClass(MakeQuestion, [{
@@ -55986,27 +56005,12 @@
 	      });
 	    }
 	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      console.log(this.props.getAppState);
-	    }
-	  }, {
-	    key: 'saveTitle',
-	    value: function saveTitle(e) {
-	      e.preventDefault();
-	      this.props.setAppState({
-	        pollTitle: (0, _jquery2.default)("#pollTitle").val(),
-	        showQuestion: true
-	      });
-	    }
-	  }, {
 	    key: 'submitPoll',
 	    value: function submitPoll(e) {
 	      e.preventDefault();
 	      var data = {
 	        userName: this.state.user,
 	        pollTitle: this.state.pollTitle || (0, _jquery2.default)("#pollTitle").val()
-
 	      };
 	    }
 	  }, {
@@ -56030,29 +56034,18 @@
 	            { to: '/accessPolls/:{user}' },
 	            'Click here to access previous polls'
 	          ),
-	          _react2.default.createElement('hr', null)
-	        ),
-	        _react2.default.createElement(
-	          'h3',
-	          null,
-	          'Create a new poll below'
-	        ),
-	        _react2.default.createElement(
-	          'form',
-	          null,
+	          _react2.default.createElement('hr', null),
 	          _react2.default.createElement(
-	            'label',
+	            'h3',
 	            null,
-	            'Poll TItle (50 characters max)'
-	          ),
-	          _react2.default.createElement('input', { type: 'text', width: '50', className: 'poll-title', id: 'pollTitle', maxLength: '50' }),
-	          _react2.default.createElement(
-	            'button',
-	            { type: 'button', onClick: this.saveTitle },
-	            'Save title'
+	            'Create a poll below'
 	          )
 	        ),
-	        this.props.getAppState.showQuestion ? _react2.default.createElement(_question2.default, { getAppState: this.props.getAppState, addQuestion: this.props.addQuestion }) : null
+	        this.props.getAppState.showCreatePollInput ? _react2.default.createElement(_pollinput2.default, { setAppState: this.props.setAppState }) : null,
+	        this.props.getAppState.showQuestion ? _react2.default.createElement(_question2.default, {
+	          getAppState: this.props.getAppState,
+	          setAppState: this.props.setAppState,
+	          addQuestion: this.props.addQuestion }) : null
 	      );
 	    }
 	  }]);
@@ -56110,10 +56103,18 @@
 	    var _this = _possibleConstructorReturn(this, (Question.__proto__ || Object.getPrototypeOf(Question)).call(this, props));
 
 	    _this.showState = _this.showState.bind(_this);
+	    _this.editPollTitle = _this.editPollTitle.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(Question, [{
+	    key: 'editPollTitle',
+	    value: function editPollTitle() {
+	      this.props.setAppState({
+	        showCreatePollInput: true
+	      });
+	    }
+	  }, {
 	    key: 'showState',
 	    value: function showState(e) {
 	      console.log(this.props.getAppState);
@@ -56122,8 +56123,15 @@
 	    key: 'render',
 	    value: function render() {
 	      var answers = [];
-	      for (var i = 0; i < 4; i++) {
-	        answers.push(_react2.default.createElement(_createAnswers2.default, { key: i, id: i }));
+	      for (var i = 1; i < 5; i++) {
+	        var placeholder = "answer " + i;
+	        answers.push(_react2.default.createElement(
+	          'label',
+	          null,
+	          'Answer ',
+	          i,
+	          _react2.default.createElement(_createAnswers2.default, { key: i, 'data-id': i })
+	        ));
 	      }
 	      return _react2.default.createElement(
 	        'div',
@@ -56131,8 +56139,14 @@
 	        _react2.default.createElement(
 	          'h3',
 	          null,
-	          'Enter up to 10 questions for ',
-	          this.props.getAppState.pollTitle
+	          'Enter up to 10 questions for poll "',
+	          this.props.getAppState.pollTitle,
+	          '"'
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: this.editPollTitle },
+	          'Change poll title'
 	        ),
 	        _react2.default.createElement('hr', null),
 	        _react2.default.createElement(
@@ -56192,7 +56206,7 @@
 	});
 
 	exports.default = function () {
-	    return _react2.default.createElement("input", { className: "answer", size: "50", placeholder: "answer" });
+	    return _react2.default.createElement("input", { className: "answer", size: "50" });
 	};
 
 	var _react = __webpack_require__(65);
@@ -56206,6 +56220,91 @@
 
 /***/ },
 /* 495 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(2), RootInstanceProvider = __webpack_require__(10), ReactMount = __webpack_require__(12), React = __webpack_require__(65); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(65);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _jquery = __webpack_require__(234);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var PollInput = function (_Component) {
+	    _inherits(PollInput, _Component);
+
+	    function PollInput(props) {
+	        _classCallCheck(this, PollInput);
+
+	        var _this = _possibleConstructorReturn(this, (PollInput.__proto__ || Object.getPrototypeOf(PollInput)).call(this, props));
+
+	        _this.saveTitle = _this.saveTitle.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(PollInput, [{
+	        key: 'saveTitle',
+	        value: function saveTitle(e) {
+	            e.preventDefault();
+	            this.props.setAppState({
+	                pollTitle: (0, _jquery2.default)("#pollTitle").val(),
+	                showQuestion: true,
+	                showCreatePollInput: false
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'form',
+	                    null,
+	                    _react2.default.createElement(
+	                        'label',
+	                        null,
+	                        'Poll TItle (50 characters max)'
+	                    ),
+	                    _react2.default.createElement('input', { type: 'text', width: '50', className: 'poll-title', id: 'pollTitle', maxLength: '50' }),
+	                    _react2.default.createElement(
+	                        'button',
+	                        { type: 'button', onClick: this.saveTitle },
+	                        'Save title'
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return PollInput;
+	}(_react.Component);
+
+	exports.default = PollInput;
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(237); if (makeExportsHot(module, __webpack_require__(65))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "pollinput.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)(module)))
+
+/***/ },
+/* 496 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(2), RootInstanceProvider = __webpack_require__(10), ReactMount = __webpack_require__(12), React = __webpack_require__(65); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -56270,7 +56369,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)(module)))
 
 /***/ },
-/* 496 */
+/* 497 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(2), RootInstanceProvider = __webpack_require__(10), ReactMount = __webpack_require__(12), React = __webpack_require__(65); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {

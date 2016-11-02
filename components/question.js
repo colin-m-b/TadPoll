@@ -7,6 +7,13 @@ export default class Question extends Component {
   constructor(props) {
     super (props)
     this.showState = this.showState.bind(this)
+    this.editPollTitle = this.editPollTitle.bind(this)
+  }
+
+  editPollTitle() {
+    this.props.setAppState({
+      showCreatePollInput: true,
+    })
   }
 
   showState(e) {
@@ -15,12 +22,14 @@ export default class Question extends Component {
 
   render() {
     let answers = []
-    for (let i = 0; i < 4; i++) {
-      answers.push(<Answer key={i} id={i}/>)
+    for (let i = 1; i < 5; i++) {
+      let placeholder = "answer " + i;
+      answers.push(<label>Answer {i}<Answer key={i} data-id={i}/></label>)
     }
     return (
       <div>
-        <h3>Enter up to 10 questions for {this.props.getAppState.pollTitle}</h3>
+        <h3>Enter up to 10 questions for poll "{this.props.getAppState.pollTitle}"</h3>
+        <button onClick={this.editPollTitle}>Change poll title</button>
         <hr/>
         <form>
           <title>Enter question below (200 character max)</title>

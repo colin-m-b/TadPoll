@@ -26,13 +26,17 @@ app.post('/createHost', dbMethods.createHost)
 
 app.post('/verifyHost', dbMethods.verifyHost)
 
-app.post('/createPoll', dbMethods.createPollInstance);
+app.post('/createPoll', dbMethods.savePoll);
 
 app.get('/getPoll/:id', dbMethods.returnPollInstance);
 
 app.put('/updatePoll/:id', dbMethods.updatePollInstance);
 
 app.post('/deletePoll/:id',  dbMethods.deletePollInstance);
+
+app.get('*',function (req, res) {
+        res.redirect('/');
+    });
 
 app.listen(8080, () => {
   console.log(__dirname, 'Server is listening on port 8080');

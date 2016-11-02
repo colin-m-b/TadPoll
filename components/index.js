@@ -8,6 +8,7 @@ import Home from './home'
 import BuildPoll from './BuildPoll'
 import AnswerPage from './answerPage'
 import CreateAccount from './createAccount'
+import AccessPolls from './accessPolls'
 
 export default class Index extends Component{
     constructor(props) {
@@ -22,7 +23,8 @@ export default class Index extends Component{
                     <Route path='/answer' component={AnswerPage} />  
                     <Route path='/createAccount' component={CreateAccount} />  
                     <Route path='/makePoll' component={BuildPoll} />
-                </Route>
+                    <Route path='/accessPolls' component={AccessPolls} />
+                 </Route>
       
             </Router>
         )

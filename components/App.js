@@ -14,7 +14,8 @@ export default class App extends Component {
       questions: [],
       quesNum: 1,
       codeBuilder: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
-      codeArr: []
+      codeArr: [],
+      showCreatePollInput: true
     }
     this.createAccount = this.createAccount.bind(this)
     this.goAdmin = this.goAdmin.bind(this)
@@ -23,7 +24,7 @@ export default class App extends Component {
     this.setAppState = this.setAppState.bind(this)
     this.addQuestion = this.addQuestion.bind(this)
     this.savePoll = this.savePoll.bind(this)
-    this.genCode = this.genCode.bind(this)
+    //this.genCode = this.genCode.bind(this)
   }
 
   savePoll(e) {
