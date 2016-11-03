@@ -11,6 +11,8 @@ export default class App extends Component {
       user: "",
       pollCode: "",
       pollTitle: "",
+      pollOpen: false,
+      userPolls: [],
       questions: [],
       quesNum: 1,
       codeBuilder: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
@@ -30,22 +32,25 @@ export default class App extends Component {
   savePoll(e) {
     e.preventDefault()
     let data = {
-      userName: this.getAppState.user,
-      pollTitle: this.getAppState.pollTitle,
-      questions: this.getAppState.questions,
-      pollCode: this.getAppState.pollCode
+      host: this.state.user,
+      title: this.state.pollTitle,
+      questions: this.state.questions,
+      open: $(".check").prop( "checked" )
     }
+    console.log(data)
     $.ajax({
       url: "http://localhost:8080/savePoll",
-      method: post,
+      method: "POST",
       data: data,
       success: function(x) {
-        alert('poll saved')
-      }
+        this.setAppState({
+          pollCode: x.code,
+          pollOpen: x.open
+        })
+        browserHistory.push('/completedPoll')
+      }.bind(this)
     })
   }
-
-
 
   createAccount(e) {
     e.preventDefault()
@@ -94,8 +99,10 @@ export default class App extends Component {
       method: "POST",
       data: data,
       success: function(x) {
+        if(x) {
         this.setState({user: data.userName}),
         browserHistory.push('/makePoll')
+      } else console.log('no')
       }.bind(this)
     })
   }

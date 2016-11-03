@@ -40,7 +40,8 @@ export default class MakeQuestion extends Component {
             <Question 
             getAppState={this.props.getAppState} 
             setAppState={this.props.setAppState}
-            addQuestion={this.props.addQuestion}/> 
+            addQuestion={this.props.addQuestion}
+            savePoll={this.props.savePoll}/> 
             : null}
       </div>
       );

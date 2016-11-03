@@ -23,8 +23,7 @@ export default class Question extends Component {
   render() {
     let answers = []
     for (let i = 1; i < 5; i++) {
-      let placeholder = "answer " + i;
-      answers.push(<label>Answer {i}<Answer key={i} data-id={i}/></label>)
+      answers.push(<label key={i}>Answer {i}<Answer key={i} data-id={i}/></label>)
     }
     return (
       <div>
@@ -39,7 +38,11 @@ export default class Question extends Component {
           {answers}
           <button type="reset" id="addQuestion" onClick={this.props.addQuestion}>Add question to poll</button>
         </form>
+        <form>
+        <label>Open poll for responses
+          <input type="checkbox" className="check" value="open"/></label>
         <button type="reset" value="Reset" onClick={this.props.savePoll}>Save poll</button>
+        </form>
       </div>
     );
   }

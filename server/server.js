@@ -26,7 +26,9 @@ app.post('/createHost', dbMethods.createHost)
 
 app.post('/verifyHost', dbMethods.verifyHost)
 
-app.post('/createPoll', dbMethods.savePoll);
+app.post('/savePoll', dbMethods.savePoll);
+
+app.get('/getPollByUser', dbMethods.getPollByUser)
 
 app.get('/getPoll/:id', dbMethods.returnPollInstance);
 

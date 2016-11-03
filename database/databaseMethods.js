@@ -45,20 +45,36 @@ dbMethods.savePoll= function(req, res) {
   const pollStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
   let pollCode = ''
     for (let i = 0; i < 4; i++) {
-      let pos = Math.floor(Math.random() * this.state.codeBuilder.length)
-      pollCode += this.state.codeBuilder[pos]
+      let pos = Math.floor(Math.random() * pollStr.length)
+      pollCode += pollStr[pos]
     }
+    console.log(pollCode)
   const poll = new Poll({
-    hostOwner: req.body.userName,
     _id: pollCode,
+    host: req.body.host,
+    title: req.body.title,
     questions: req.body.questions,
+    open: req.body.open,
     created_at: Date.now()
   });
-  poll.save = function(err) {
+  poll.save(function(err, pollData) {
+    console.log('saving poll')
     if (err) return console.error('Error! ' + err);
-    res.send(poll._id);
-  };
+    res.send({
+      code: poll._id,
+      open: poll.open
+    });
+  });
 };
+
+dbMethods.getPollByUser = function(req, res) {
+  console.log('finding by user', req.query.host)
+  Poll.find({host: req.query.host}, {_id: 1, title: 1}, function(err, data) {
+    if (err) res.send(err)
+    if (!data) res.send(false)
+    else res.send(data)
+  })
+}
 
 dbMethods.returnPollInstance = function(req, res) {
   Poll.findOne({_id: req.params.id}, (err, foundPoll) => {
