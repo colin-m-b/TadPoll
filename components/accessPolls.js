@@ -9,8 +9,6 @@ export default class AccessPolls extends Component {
 
     }
 
-
-
     showPolls(data) {
         this.props.setAppState({    
             showUserPolls: true,
@@ -63,27 +61,5 @@ export default class AccessPolls extends Component {
             </div>
         )
     }
-        // let pollTables = []
-        // const pollData = this.props.getAppState.userPolls
-        // for (let i = 0; i < pollData.length; i++) {
-        //     let questions = []
-        //     let poll = {}`  1`
-        //     poll.questions = []
-        //     poll.title = (
-        //         <div>
-        //             <h3>{pollData[i].pollTitle}</h3>
-        //         </div>)
-        //     for (let j = 0; j < pollData[i].questions.length; j++ ) {
-        //         let quesObj = {}
-        //         quesObj.question = <tr>{pollData[i].questions[j]}</tr>
-        //         let answers = []
-        //         for (let l = 0; l < pollData[i].questions[j].answers.length; l++) {
-        //             answers.push(<li>{pollData[i].questions[j].answers[l]}</li>)
-        //         }
-        //         quesObj.answers = answers
-        //         poll.questions.push(quesObj)
-    //         }
-
-    //     }
-    // }
+        
 }

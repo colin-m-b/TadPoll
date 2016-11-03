@@ -40,7 +40,7 @@ export default class Question extends Component {
         </form>
         <form>
         <label>Open poll for responses
-          <input type="checkbox" className="check" value="open"/></label>
+          <input type="checkbox" className="check" /></label>
         <button type="reset" value="Reset" onClick={this.props.savePoll}>Save poll</button>
         </form>
       </div>

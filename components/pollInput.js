@@ -10,9 +10,9 @@ export default class PollInput extends Component {
     saveTitle(e) {
         e.preventDefault()
         this.props.setAppState({
-        pollTitle: $("#pollTitle").val(),
-        showQuestion: true,
-        showCreatePollInput: false
+            pollTitle: $("#pollTitle").val(),
+            showQuestion: true,
+            showCreatePollInput: false
         })
     }
 

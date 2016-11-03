@@ -107,8 +107,6 @@ dbMethods.deletePollInstance = function(req, res) {
   });
 };
 
-
-
 mongoose.connect('mongodb://localhost:27017/tadpoll');
 
 module.exports = dbMethods;
