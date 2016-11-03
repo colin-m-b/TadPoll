@@ -76,6 +76,14 @@ dbMethods.getPollByUser = function(req, res) {
   })
 }
 
+dbMethods.getPollByCode = function(req, res) {
+  Poll.find({_id: req.query._id}, {_id: 1, title: 1, questions: 1}, function(err, data) {
+    if (err) res.send(err)
+    if (!data) res.send(false)
+    else res.send(data)
+  })
+}
+
 dbMethods.returnPollInstance = function(req, res) {
   Poll.findOne({_id: req.params.id}, (err, foundPoll) => {
     if (err) res.send(err)

@@ -30,7 +30,7 @@ app.post('/savePoll', dbMethods.savePoll);
 
 app.get('/getPollByUser', dbMethods.getPollByUser)
 
-app.get('/getPoll/:id', dbMethods.returnPollInstance);
+app.get('/getPoll', dbMethods.getPollByCode);
 
 app.put('/updatePoll/:id', dbMethods.updatePollInstance);
 

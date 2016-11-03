@@ -111,7 +111,13 @@ export default class App extends Component {
     let questions = this.state.questions
     let answers = []
     $(".answer").each(function(i) {
-      if ($(this).val()) answers.push($(this).val())
+      let answerObj = {}
+      if ($(this).val()) {
+        answerObj.answer = ($(this).val())
+        answerObj.votes = 0
+        answers.push(answerObj)
+      }
+      
     })
     questions.push({
       question: $("#question").val(),

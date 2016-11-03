@@ -12,10 +12,10 @@ export default class TableRow extends Component {
         return (
             <tr>
                 <td>
-                    <Link to='/reviewPoll/{path}'>{title}</Link>
+                    <Link to={`/reviewPoll/${code}`}>{title}</Link>
                 </td>
                 <td>
-                    <Link to='/reviewPoll/{path}'>{code}</Link>
+                    <Link to={`/reviewPoll/${code}`}>{code}</Link>
                 </td>
             </tr>
         )
