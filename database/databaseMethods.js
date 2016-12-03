@@ -77,7 +77,7 @@ dbMethods.getPollByUser = function(req, res) {
 }
 
 dbMethods.getPollByCode = function(req, res) {
-  Poll.find({_id: req.query._id}, {_id: 1, title: 1, questions: 1}, function(err, data) {
+  Poll.find({_id: req.query._id}, {_id: 1, title: 1, questions: 1, open: 1}, function(err, data) {
     if (err) res.send(err)
     if (!data) res.send(false)
     else res.send(data)
@@ -92,10 +92,13 @@ dbMethods.returnPollInstance = function(req, res) {
   });
 };
 
-dbMethods.updatePollInstance = function(req, res) {
-  const id = req.params.id;
-  Poll.fidByIdandUpdate({_id: id}, {accessCode: req.body.accessCode, questions: req.body.questions}, {new: true}, (err, newPoll) => {
-    res.send(newPoll)
+dbMethods.updatePoll = function(req, res) {
+  console.log(req.body)
+  const id = req.body._id;
+  Poll.findByIdAndUpdate({_id: id}, req.body, {new: true}, (err, newPoll) => {
+    if (err) console.log('err! ' + err)
+    console.log(newPoll)
+    res.send(newPoll.open)
   });
 };
 

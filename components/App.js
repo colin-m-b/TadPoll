@@ -24,7 +24,6 @@ export default class App extends Component {
     this.goAnswer = this.goAnswer.bind(this)
     this.login = this.login.bind(this)
     this.setAppState = this.setAppState.bind(this)
-    this.addQuestion = this.addQuestion.bind(this)
     this.savePoll = this.savePoll.bind(this)
     //this.genCode = this.genCode.bind(this)
   }
@@ -45,7 +44,8 @@ export default class App extends Component {
       success: function(x) {
         this.setAppState({
           pollCode: x.code,
-          pollOpen: x.open
+          pollOpen: x.open,
+          quesNum: 1
         })
         browserHistory.push('/completedPoll')
       }.bind(this)
@@ -107,29 +107,7 @@ export default class App extends Component {
     })
   }
 
-  addQuestion(e) {
-    let questions = this.state.questions
-    let answers = []
-    $(".answer").each(function(i) {
-      let answerObj = {}
-      if ($(this).val()) {
-        answerObj.answer = ($(this).val())
-        answerObj.votes = 0
-        answers.push(answerObj)
-      }
-      
-    })
-    questions.push({
-      question: $("#question").val(),
-      answers: answers
-    })
-    this.setAppState({
-      questions: questions,
-      quesNum: questions.length + 1
-    })
-    alert('Question added!')
-    if (questions.length + 1 === 11) $("#addQuestion").prop("disabled", true)
-  }
+
 
   render() {
     return (
@@ -139,7 +117,6 @@ export default class App extends Component {
         setAppState: this.setAppState, 
         goAdmin: this.goAdmin, 
         createAccount: this.createAccount,
-        addQuestion: this.addQuestion,
         savePoll: this.savePoll,
         login: this.login} ) }
       </div>

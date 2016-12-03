@@ -4,7 +4,8 @@ import $ from 'jquery'
 
 export default class ReviewPoll extends Component {
     constructor (props) {
-        super()
+        super(props)
+        this.changePollStatus = this.changePollStatus.bind(this)
     }
 
     componentDidMount() {
@@ -19,13 +20,43 @@ export default class ReviewPoll extends Component {
                 this.props.setAppState({
                     pollTitle: data[0].title,
                     questions: data[0].questions,
-                    pollCode: data[0]._id
+                    pollCode: data[0]._id,
+                    pollOpen: data[0].open
                 })
             }.bind(this)
         })
     }
 
+    changePollStatus(e) {
+        e.preventDefault()
+        let data = {
+            open: (!this.props.getAppState.pollOpen),
+            _id: this.props.getAppState.pollCode
+        }
+        $.ajax({
+            url: 'http://localhost:8080/updatePoll',
+            method: "PUT",
+            data: data,
+            success: function(x) {
+                console.log(x)
+                this.props.setAppState({
+                    pollOpen: (!this.props.getAppState.pollOpen)
+                })
+            }.bind(this)
+        })
+
+    }
+
     render() {
+        let open = ''
+        let Button 
+        if (this.props.getAppState.pollOpen) {
+            open = 'open'
+            Button = <button type="button" onClick={this.changePollStatus}>Close Poll</button>
+        }else {
+            open = 'closed'
+            Button = <button type="button" onClick={this.changePollStatus}>Open Poll</button>
+        }
         let questions = []
         console.log(this.props.getAppState.questions)
         for (let i = 0; i < this.props.getAppState.questions.length; i++) {
@@ -42,14 +73,21 @@ export default class ReviewPoll extends Component {
                 <table style={{verticalAlign: "top"}}>
                     <thead>
                         <tr>
-                            <td>{this.props.getAppState.pollTitle}</td>
-                            <td>{this.props.getAppState.pollCode}</td>
+                            <th>{this.props.getAppState.pollTitle}</th>
+                            <th>{this.props.getAppState.pollCode}</th>
+                        </tr>
+                        <tr>
+
                         </tr>
                     </thead>
                     <tbody>
                         {questions}
                     </tbody>
                 </table>
+                <div>
+                This poll is <b>{open}</b>. Click button to change status
+                {Button}
+                </div>
             </div>
         )
     }

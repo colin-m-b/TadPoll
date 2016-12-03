@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "f5c491f45fe5867246b4"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "749edee6a987d326aacd"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -26534,7 +26534,6 @@
 	    _this.goAnswer = _this.goAnswer.bind(_this);
 	    _this.login = _this.login.bind(_this);
 	    _this.setAppState = _this.setAppState.bind(_this);
-	    _this.addQuestion = _this.addQuestion.bind(_this);
 	    _this.savePoll = _this.savePoll.bind(_this);
 	    //this.genCode = this.genCode.bind(this)
 	    return _this;
@@ -26558,7 +26557,8 @@
 	        success: function (x) {
 	          this.setAppState({
 	            pollCode: x.code,
-	            pollOpen: x.open
+	            pollOpen: x.open,
+	            quesNum: 1
 	          });
 	          _reactRouter.browserHistory.push('/completedPoll');
 	        }.bind(this)
@@ -26623,30 +26623,6 @@
 	      });
 	    }
 	  }, {
-	    key: 'addQuestion',
-	    value: function addQuestion(e) {
-	      var questions = this.state.questions;
-	      var answers = [];
-	      (0, _jquery2.default)(".answer").each(function (i) {
-	        var answerObj = {};
-	        if ((0, _jquery2.default)(this).val()) {
-	          answerObj.answer = (0, _jquery2.default)(this).val();
-	          answerObj.votes = 0;
-	          answers.push(answerObj);
-	        }
-	      });
-	      questions.push({
-	        question: (0, _jquery2.default)("#question").val(),
-	        answers: answers
-	      });
-	      this.setAppState({
-	        questions: questions,
-	        quesNum: questions.length + 1
-	      });
-	      alert('Question added!');
-	      if (questions.length + 1 === 11) (0, _jquery2.default)("#addQuestion").prop("disabled", true);
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -26657,7 +26633,6 @@
 	          setAppState: this.setAppState,
 	          goAdmin: this.goAdmin,
 	          createAccount: this.createAccount,
-	          addQuestion: this.addQuestion,
 	          savePoll: this.savePoll,
 	          login: this.login })
 	      );
@@ -56132,8 +56107,8 @@
 
 	    var _this = _possibleConstructorReturn(this, (Question.__proto__ || Object.getPrototypeOf(Question)).call(this, props));
 
-	    _this.showState = _this.showState.bind(_this);
 	    _this.editPollTitle = _this.editPollTitle.bind(_this);
+	    _this.addQuestion = _this.addQuestion.bind(_this);
 	    return _this;
 	  }
 
@@ -56145,23 +56120,73 @@
 	      });
 	    }
 	  }, {
-	    key: 'showState',
-	    value: function showState(e) {
-	      console.log(this.props.getAppState);
+	    key: 'addQuestion',
+	    value: function addQuestion(e) {
+	      var questions = this.props.getAppState.questions;
+	      var answers = [];
+	      (0, _jquery2.default)(".answer").each(function (i) {
+	        var answerObj = {};
+	        if ((0, _jquery2.default)(this).val()) {
+	          answerObj.answer = (0, _jquery2.default)(this).val();
+	          answerObj.votes = 0;
+	          answers.push(answerObj);
+	        }
+	      });
+	      questions.push({
+	        question: (0, _jquery2.default)("#question").val(),
+	        answers: answers
+	      });
+	      this.props.setAppState({
+	        questions: questions,
+	        quesNum: questions.length + 1
+	      });
+	      alert('Question added!');
+	      if (questions.length === 10) (0, _jquery2.default)("#addQuestion").prop("disabled", true);
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var questionNum = this.props.getAppState.quesNum - 1;
+	      var value = '';
 	      var answers = [];
-	      for (var i = 1; i < 5; i++) {
-	        answers.push(_react2.default.createElement(
-	          'label',
-	          { key: i },
-	          'Answer ',
-	          i,
-	          _react2.default.createElement(_createAnswers2.default, { key: i, 'data-id': i })
-	        ));
+	      if (this.props.getAppState.questions[questionNum]) {
+	        value = this.props.getAppState.questions[questionNum].question;
+	        this.props.getAppState.questions[questionNum].answers.forEach(function (x) {
+	          answers.push(x.answer);
+	        });
+	      } else {
+	        for (var i = 1; i < 5; i++) {
+	          answers.push(_react2.default.createElement(
+	            'label',
+	            { key: i },
+	            'Answer ',
+	            i,
+	            _react2.default.createElement(_createAnswers2.default, { key: i, 'data-id': i })
+	          ));
+	        }
 	      }
+	      var inputForm = _react2.default.createElement(
+	        'form',
+	        null,
+	        _react2.default.createElement('input', {
+	          defaultValue: value,
+	          id: 'question',
+	          size: '100',
+	          placeholder: 'question',
+	          maxLength: '200' }),
+	        _react2.default.createElement(
+	          'title',
+	          null,
+	          'Enter up to four answer choices (50 characters max)'
+	        ),
+	        answers,
+	        _react2.default.createElement(
+	          'button',
+	          { type: 'reset', id: 'addQuestion', onClick: this.addQuestion },
+	          'Save question to poll'
+	        )
+	      );
+
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -56179,32 +56204,17 @@
 	        ),
 	        _react2.default.createElement('hr', null),
 	        _react2.default.createElement(
-	          'form',
+	          'title',
 	          null,
-	          _react2.default.createElement(
-	            'title',
-	            null,
-	            'Enter question below (200 character max)'
-	          ),
-	          _react2.default.createElement(
-	            'p',
-	            null,
-	            'Enter question ',
-	            this.props.getAppState.quesNum
-	          ),
-	          _react2.default.createElement('input', { id: 'question', size: '100', placeholder: 'question', maxLength: '200' }),
-	          _react2.default.createElement(
-	            'title',
-	            null,
-	            'Enter up to four answer choices (50 characters max)'
-	          ),
-	          answers,
-	          _react2.default.createElement(
-	            'button',
-	            { type: 'reset', id: 'addQuestion', onClick: this.props.addQuestion },
-	            'Add question to poll'
-	          )
+	          'Enter question below (200 character max)'
 	        ),
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          'Enter question ',
+	          this.props.getAppState.quesNum
+	        ),
+	        inputForm,
 	        _react2.default.createElement(
 	          'form',
 	          null,
@@ -56212,7 +56222,7 @@
 	            'label',
 	            null,
 	            'Open poll for responses',
-	            _react2.default.createElement('input', { type: 'checkbox', className: 'check', value: 'open' })
+	            _react2.default.createElement('input', { type: 'checkbox', className: 'check' })
 	          ),
 	          _react2.default.createElement(
 	            'button',
@@ -56603,30 +56613,6 @@
 	                )
 	            );
 	        }
-	        // let pollTables = []
-	        // const pollData = this.props.getAppState.userPolls
-	        // for (let i = 0; i < pollData.length; i++) {
-	        //     let questions = []
-	        //     let poll = {}`  1`
-	        //     poll.questions = []
-	        //     poll.title = (
-	        //         <div>
-	        //             <h3>{pollData[i].pollTitle}</h3>
-	        //         </div>)
-	        //     for (let j = 0; j < pollData[i].questions.length; j++ ) {
-	        //         let quesObj = {}
-	        //         quesObj.question = <tr>{pollData[i].questions[j]}</tr>
-	        //         let answers = []
-	        //         for (let l = 0; l < pollData[i].questions[j].answers.length; l++) {
-	        //             answers.push(<li>{pollData[i].questions[j].answers[l]}</li>)
-	        //         }
-	        //         quesObj.answers = answers
-	        //         poll.questions.push(quesObj)
-	        //         }
-
-	        //     }
-	        // }
-
 	    }]);
 
 	    return AccessPolls;
@@ -56831,7 +56817,10 @@
 	    function ReviewPoll(props) {
 	        _classCallCheck(this, ReviewPoll);
 
-	        return _possibleConstructorReturn(this, (ReviewPoll.__proto__ || Object.getPrototypeOf(ReviewPoll)).call(this));
+	        var _this = _possibleConstructorReturn(this, (ReviewPoll.__proto__ || Object.getPrototypeOf(ReviewPoll)).call(this, props));
+
+	        _this.changePollStatus = _this.changePollStatus.bind(_this);
+	        return _this;
 	    }
 
 	    _createClass(ReviewPoll, [{
@@ -56848,7 +56837,28 @@
 	                    this.props.setAppState({
 	                        pollTitle: data[0].title,
 	                        questions: data[0].questions,
-	                        pollCode: data[0]._id
+	                        pollCode: data[0]._id,
+	                        pollOpen: data[0].open
+	                    });
+	                }.bind(this)
+	            });
+	        }
+	    }, {
+	        key: 'changePollStatus',
+	        value: function changePollStatus(e) {
+	            e.preventDefault();
+	            var data = {
+	                open: !this.props.getAppState.pollOpen,
+	                _id: this.props.getAppState.pollCode
+	            };
+	            _jquery2.default.ajax({
+	                url: 'http://localhost:8080/updatePoll',
+	                method: "PUT",
+	                data: data,
+	                success: function (x) {
+	                    console.log(x);
+	                    this.props.setAppState({
+	                        pollOpen: !this.props.getAppState.pollOpen
 	                    });
 	                }.bind(this)
 	            });
@@ -56856,6 +56866,23 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var open = '';
+	            var Button = void 0;
+	            if (this.props.getAppState.pollOpen) {
+	                open = 'open';
+	                Button = _react2.default.createElement(
+	                    'button',
+	                    { type: 'button', onClick: this.changePollStatus },
+	                    'Close Poll'
+	                );
+	            } else {
+	                open = 'closed';
+	                Button = _react2.default.createElement(
+	                    'button',
+	                    { type: 'button', onClick: this.changePollStatus },
+	                    'Open Poll'
+	                );
+	            }
 	            var questions = [];
 	            console.log(this.props.getAppState.questions);
 	            for (var i = 0; i < this.props.getAppState.questions.length; i++) {
@@ -56903,22 +56930,35 @@
 	                            'tr',
 	                            null,
 	                            _react2.default.createElement(
-	                                'td',
+	                                'th',
 	                                null,
 	                                this.props.getAppState.pollTitle
 	                            ),
 	                            _react2.default.createElement(
-	                                'td',
+	                                'th',
 	                                null,
 	                                this.props.getAppState.pollCode
 	                            )
-	                        )
+	                        ),
+	                        _react2.default.createElement('tr', null)
 	                    ),
 	                    _react2.default.createElement(
 	                        'tbody',
 	                        null,
 	                        questions
 	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    'This poll is ',
+	                    _react2.default.createElement(
+	                        'b',
+	                        null,
+	                        open
+	                    ),
+	                    '. Click button to change status',
+	                    Button
 	                )
 	            );
 	        }
