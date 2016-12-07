@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "749edee6a987d326aacd"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "82204328757b760c3fcb"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -56045,7 +56045,7 @@
 	            'Create a poll below'
 	          )
 	        ),
-	        this.props.getAppState.showCreatePollInput ? _react2.default.createElement(_pollinput2.default, { setAppState: this.props.setAppState }) : null,
+	        this.props.getAppState.showCreatePollInput ? _react2.default.createElement(_pollinput2.default, { setAppState: this.props.setAppState, getAppState: this.props.getAppState }) : null,
 	        this.props.getAppState.showQuestion ? _react2.default.createElement(_question2.default, {
 	          getAppState: this.props.getAppState,
 	          setAppState: this.props.setAppState,
@@ -56113,6 +56113,13 @@
 	  }
 
 	  _createClass(Question, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      if (this.props.getAppState.pollTitle) this.props.setAppState({
+	        showCreatePollInput: true
+	      });
+	    }
+	  }, {
 	    key: 'editPollTitle',
 	    value: function editPollTitle() {
 	      this.props.setAppState({
@@ -56138,7 +56145,7 @@
 	      });
 	      this.props.setAppState({
 	        questions: questions,
-	        quesNum: questions.length + 1
+	        quesNum: this.props.getAppState.quesNum + 1
 	      });
 	      alert('Question added!');
 	      if (questions.length === 10) (0, _jquery2.default)("#addQuestion").prop("disabled", true);
@@ -56147,45 +56154,52 @@
 	    key: 'render',
 	    value: function render() {
 	      var questionNum = this.props.getAppState.quesNum - 1;
-	      var value = '';
+	      console.log("quesnum: " + questionNum);
+	      var value = void 0;
 	      var answers = [];
 	      if (this.props.getAppState.questions[questionNum]) {
 	        value = this.props.getAppState.questions[questionNum].question;
-	        this.props.getAppState.questions[questionNum].answers.forEach(function (x) {
-	          answers.push(x.answer);
-	        });
-	      } else {
+	        console.log("yes " + questionNum + value);
 	        for (var i = 1; i < 5; i++) {
+	          var num = i - 1;
+	          if (this.props.getAppState.questions[questionNum].answers[num]) {
+	            var answer = this.props.getAppState.questions[questionNum].answers[num].answer;
+	            console.log(answer);
+	            answers.push(_react2.default.createElement(
+	              'span',
+	              { key: i },
+	              _react2.default.createElement(
+	                'label',
+	                { key: "key" + i },
+	                'Answer ',
+	                i
+	              ),
+	              _react2.default.createElement('input', { key: questionNum + i, 'data-id': i, defaultValue: answer })
+	            ));
+	          } else answers.push(_react2.default.createElement(
+	            'span',
+	            { key: "key" + i },
+	            _react2.default.createElement(
+	              'label',
+	              { key: "key" + i },
+	              'Answer ',
+	              i
+	            ),
+	            _react2.default.createElement(_createAnswers2.default, { key: questionNum + i, 'data-id': i })
+	          ));
+	        }
+	      } else {
+	        value = "";
+	        for (var _i = 1; _i < 5; _i++) {
 	          answers.push(_react2.default.createElement(
 	            'label',
-	            { key: i },
+	            { key: _i },
 	            'Answer ',
-	            i,
-	            _react2.default.createElement(_createAnswers2.default, { key: i, 'data-id': i })
+	            _i,
+	            _react2.default.createElement(_createAnswers2.default, { key: _i, 'data-id': _i })
 	          ));
 	        }
 	      }
-	      var inputForm = _react2.default.createElement(
-	        'form',
-	        null,
-	        _react2.default.createElement('input', {
-	          defaultValue: value,
-	          id: 'question',
-	          size: '100',
-	          placeholder: 'question',
-	          maxLength: '200' }),
-	        _react2.default.createElement(
-	          'title',
-	          null,
-	          'Enter up to four answer choices (50 characters max)'
-	        ),
-	        answers,
-	        _react2.default.createElement(
-	          'button',
-	          { type: 'reset', id: 'addQuestion', onClick: this.addQuestion },
-	          'Save question to poll'
-	        )
-	      );
 
 	      return _react2.default.createElement(
 	        'div',
@@ -56214,7 +56228,27 @@
 	          'Enter question ',
 	          this.props.getAppState.quesNum
 	        ),
-	        inputForm,
+	        _react2.default.createElement(
+	          'form',
+	          null,
+	          _react2.default.createElement('input', {
+	            defaultValue: value,
+	            id: 'question',
+	            size: '100',
+	            placeholder: 'question',
+	            maxLength: '200' }),
+	          _react2.default.createElement(
+	            'title',
+	            null,
+	            'Enter up to four answer choices (50 characters max)'
+	          ),
+	          answers,
+	          _react2.default.createElement(
+	            'button',
+	            { type: 'reset', id: 'addQuestion', onClick: this.addQuestion },
+	            'Save question to poll'
+	          )
+	        ),
 	        _react2.default.createElement(
 	          'form',
 	          null,
@@ -56255,7 +56289,7 @@
 	});
 
 	exports.default = function () {
-	    return _react2.default.createElement("input", { className: "answer", size: "50" });
+	    return _react2.default.createElement("input", { className: "answer", size: "50", defaultValue: "" });
 	};
 
 	var _react = __webpack_require__(65);
@@ -56322,6 +56356,8 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var title = "";
+	            if (this.props.getAppState.pollTitle) title = this.props.getAppState.pollTitle;
 	            return _react2.default.createElement(
 	                'div',
 	                null,
@@ -56333,7 +56369,7 @@
 	                        null,
 	                        'Poll TItle (50 characters max)'
 	                    ),
-	                    _react2.default.createElement('input', { type: 'text', width: '50', className: 'poll-title', id: 'pollTitle', maxLength: '50' }),
+	                    _react2.default.createElement('input', { type: 'text', width: '50', className: 'poll-title', id: 'pollTitle', maxLength: '50', defaultValue: title }),
 	                    _react2.default.createElement(
 	                        'button',
 	                        { type: 'button', onClick: this.saveTitle },
@@ -56820,6 +56856,7 @@
 	        var _this = _possibleConstructorReturn(this, (ReviewPoll.__proto__ || Object.getPrototypeOf(ReviewPoll)).call(this, props));
 
 	        _this.changePollStatus = _this.changePollStatus.bind(_this);
+	        _this.editPoll = _this.editPoll.bind(_this);
 	        return _this;
 	    }
 
@@ -56838,7 +56875,8 @@
 	                        pollTitle: data[0].title,
 	                        questions: data[0].questions,
 	                        pollCode: data[0]._id,
-	                        pollOpen: data[0].open
+	                        pollOpen: data[0].open,
+	                        showQuestion: true
 	                    });
 	                }.bind(this)
 	            });
@@ -56864,6 +56902,13 @@
 	            });
 	        }
 	    }, {
+	        key: 'editPoll',
+	        value: function editPoll(e) {
+	            e.preventDefault();
+	            console.log(e);
+	            _reactRouter.browserHistory.push("/makePoll");
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var open = '';
@@ -56882,7 +56927,7 @@
 	                    { type: 'button', onClick: this.changePollStatus },
 	                    'Open Poll'
 	                );
-	            }
+	            }'';
 	            var questions = [];
 	            console.log(this.props.getAppState.questions);
 	            for (var i = 0; i < this.props.getAppState.questions.length; i++) {
@@ -56958,7 +57003,13 @@
 	                        open
 	                    ),
 	                    '. Click button to change status',
-	                    Button
+	                    Button,
+	                    'Click button to edit poll',
+	                    _react2.default.createElement(
+	                        'button',
+	                        { type: 'submit', onClick: this.editPoll },
+	                        'Edit Poll'
+	                    )
 	                )
 	            );
 	        }

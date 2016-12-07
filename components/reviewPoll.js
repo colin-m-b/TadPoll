@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { Link, browserHistroy } from 'react-router'
+import { Link, browserHistory } from 'react-router'
 import $ from 'jquery'
 
 export default class ReviewPoll extends Component {
     constructor (props) {
         super(props)
         this.changePollStatus = this.changePollStatus.bind(this)
+        this.editPoll = this.editPoll.bind(this)
     }
 
     componentDidMount() {
@@ -21,7 +22,8 @@ export default class ReviewPoll extends Component {
                     pollTitle: data[0].title,
                     questions: data[0].questions,
                     pollCode: data[0]._id,
-                    pollOpen: data[0].open
+                    pollOpen: data[0].open,
+                    showQuestion: true
                 })
             }.bind(this)
         })
@@ -44,7 +46,12 @@ export default class ReviewPoll extends Component {
                 })
             }.bind(this)
         })
+    }
 
+    editPoll(e) {
+        e.preventDefault()
+        console.log(e)
+        browserHistory.push("/makePoll")
     }
 
     render() {
@@ -56,7 +63,7 @@ export default class ReviewPoll extends Component {
         }else {
             open = 'closed'
             Button = <button type="button" onClick={this.changePollStatus}>Open Poll</button>
-        }
+        }``
         let questions = []
         console.log(this.props.getAppState.questions)
         for (let i = 0; i < this.props.getAppState.questions.length; i++) {
@@ -87,6 +94,8 @@ export default class ReviewPoll extends Component {
                 <div>
                 This poll is <b>{open}</b>. Click button to change status
                 {Button}
+                Click button to edit poll
+                <button type="submit" onClick={this.editPoll}>Edit Poll</button>
                 </div>
             </div>
         )

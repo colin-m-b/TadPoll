@@ -10,6 +10,12 @@ export default class Question extends Component {
     this.addQuestion = this.addQuestion.bind(this)
   }
 
+  componentDidMount() {
+    if (this.props.getAppState.pollTitle) this.props.setAppState({
+      showCreatePollInput: true,
+    })
+  }
+
   editPollTitle() {
     this.props.setAppState({
       showCreatePollInput: true,
@@ -34,7 +40,7 @@ export default class Question extends Component {
     })
     this.props.setAppState({
       questions: questions,
-      quesNum: questions.length + 1
+      quesNum: this.props.getAppState.quesNum + 1
     })
     alert('Question added!')
     if (questions.length === 10) $("#addQuestion").prop("disabled", true)
@@ -42,20 +48,37 @@ export default class Question extends Component {
 
   render() {
     let questionNum = this.props.getAppState.quesNum - 1
-    let value = ''
+    console.log("quesnum: " + questionNum)
+    let value
     let answers = []
-    if (this.props.getAppState.questions[questionNum] ){
+    if (this.props.getAppState.questions[questionNum]){
       value = this.props.getAppState.questions[questionNum].question
-      this.props.getAppState.questions[questionNum].answers.forEach(x => {
-        answers.push(x.answer)
-      })
+      console.log("yes " + questionNum + value)
+      for (let i = 1; i < 5; i++) {
+        let num = i - 1
+        if (this.props.getAppState.questions[questionNum].answers[num]) {
+          let answer = this.props.getAppState.questions[questionNum].answers[num].answer
+          console.log(answer)
+        answers.push(<span key={i}><label key={"key" + i}>Answer {i}</label><input key={questionNum + i} data-id={i} defaultValue={answer}/></span>)
+      }
+      else answers.push(<span key={"key" + i}><label key={"key" + i}>Answer {i}</label><Answer key={questionNum + i} data-id={i}/></span>)
+      }
     }else{
+      value = ""
       for (let i = 1; i < 5; i++) {
         answers.push(<label key={i}>Answer {i}<Answer key={i} data-id={i}/></label>)
       }
     }
-    let inputForm = (
-      <form>
+
+
+    return (
+      <div>
+        <h3>Enter up to 10 questions for poll "{this.props.getAppState.pollTitle}"</h3>
+        <button onClick={this.editPollTitle}>Change poll title</button>
+        <hr/>
+        <title>Enter question below (200 character max)</title>
+        <p>Enter question {this.props.getAppState.quesNum}</p>
+        <form>
           <input 
           defaultValue={value}
           id="question" 
@@ -65,17 +88,7 @@ export default class Question extends Component {
           <title>Enter up to four answer choices (50 characters max)</title>
           {answers}
           <button type="reset" id="addQuestion" onClick={this.addQuestion}>Save question to poll</button>
-      </form>)
-
-    return (
-      <div>
-        <h3>Enter up to 10 questions for poll "{this.props.getAppState.pollTitle}"</h3>
-        <button onClick={this.editPollTitle}>Change poll title</button>
-        <hr/>
-        <title>Enter question below (200 character max)</title>
-        <p>Enter question {this.props.getAppState.quesNum}</p>
-        {inputForm}
-        
+      </form>
         <form>
         <label>Open poll for responses
           <input type="checkbox" className="check" /></label>

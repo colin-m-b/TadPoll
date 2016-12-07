@@ -17,12 +17,14 @@ export default class PollInput extends Component {
     }
 
     render() {
+        let title = ""
+        if (this.props.getAppState.pollTitle) title = this.props.getAppState.pollTitle
         return (
             <div>
                 
             <form>
                 <label>Poll TItle (50 characters max)</label>
-                <input type="text" width="50" className='poll-title' id="pollTitle" maxLength="50"/>
+                <input type="text" width="50" className='poll-title' id="pollTitle" maxLength="50" defaultValue={title}/>
                 <button type="button" onClick={this.saveTitle}>Save title</button>
             </form>
           </div>

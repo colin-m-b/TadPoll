@@ -35,7 +35,7 @@ export default class MakeQuestion extends Component {
           <hr/>
           <h3>Create a poll below</h3>
         </div>
-          {this.props.getAppState.showCreatePollInput ? <PollInput setAppState={this.props.setAppState}/> : null}
+          {this.props.getAppState.showCreatePollInput ? <PollInput setAppState={this.props.setAppState} getAppState={this.props.getAppState}/> : null}
           { this.props.getAppState.showQuestion ? 
             <Question 
             getAppState={this.props.getAppState} 
