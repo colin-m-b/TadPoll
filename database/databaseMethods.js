@@ -87,7 +87,7 @@ dbMethods.getPollByCode = function(req, res) {
 dbMethods.returnPollInstance = function(req, res) {
   Poll.findOne({_id: req.params.id}, (err, foundPoll) => {
     if (err) res.send(err)
-    if (!foundPoll) res.send('poll not found');
+    if (!foundPoll) res.send(false);
     else res.send(foundPoll);
   });
 };

@@ -31,8 +31,7 @@ export default class Question extends Component {
         answerObj.answer = ($(this).val())
         answerObj.votes = 0
         answers.push(answerObj)
-      }
-      
+      }  
     })
     questions.push({
       question: $("#question").val(),

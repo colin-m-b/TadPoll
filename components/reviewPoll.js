@@ -51,7 +51,7 @@ export default class ReviewPoll extends Component {
     editPoll(e) {
         e.preventDefault()
         console.log(e)
-        browserHistory.push("/makePoll")
+        browserHistory.push(`/updatePoll`)
     }
 
     render() {
