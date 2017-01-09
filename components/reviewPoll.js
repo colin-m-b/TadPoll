@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link, browserHistory } from 'react-router'
 import $ from 'jquery'
+import PollStatusButton from './pollStatusButton'
 
 export default class ReviewPoll extends Component {
     constructor (props) {
@@ -55,16 +56,10 @@ export default class ReviewPoll extends Component {
     }
 
     render() {
-        let open = ''
-        let Button 
-        if (this.props.getAppState.pollOpen) {
-            open = 'open'
-            Button = <button type="button" onClick={this.changePollStatus}>Close Poll</button>
-        }else {
-            open = 'closed'
-            Button = <button type="button" onClick={this.changePollStatus}>Open Poll</button>
-        }``
+        let openOrClosed = this.props.getAppState.pollOpen ? 'open' : 'closed'
+
         let questions = []
+
         console.log(this.props.getAppState.questions)
         for (let i = 0; i < this.props.getAppState.questions.length; i++) {
             let questionTemp = (<td key={i}>{this.props.getAppState.questions[i].question}</td>)
@@ -92,8 +87,12 @@ export default class ReviewPoll extends Component {
                     </tbody>
                 </table>
                 <div>
-                This poll is <b>{open}</b>. Click button to change status
-                {Button}
+                This poll is <b>{openOrClosed}</b>. Click button to change status
+                <PollStatusButton 
+                getAppState={this.props.getAppState} 
+                setAppState={this.props.setAppState}
+                className="test">
+                </PollStatusButton>
                 Click button to edit poll
                 <button type="submit" onClick={this.editPoll}>Edit Poll</button>
                 </div>

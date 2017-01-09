@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "16279f8c83116d163c0e"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "cd035d3d878742ba8b2f"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -643,7 +643,7 @@
 
 	var _reviewPoll2 = _interopRequireDefault(_reviewPoll);
 
-	var _updatePoll = __webpack_require__(502);
+	var _updatePoll = __webpack_require__(503);
 
 	var _updatePoll2 = _interopRequireDefault(_updatePoll);
 
@@ -56844,6 +56844,10 @@
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
+	var _pollStatusButton = __webpack_require__(502);
+
+	var _pollStatusButton2 = _interopRequireDefault(_pollStatusButton);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -56916,24 +56920,10 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var open = '';
-	            var Button = void 0;
-	            if (this.props.getAppState.pollOpen) {
-	                open = 'open';
-	                Button = _react2.default.createElement(
-	                    'button',
-	                    { type: 'button', onClick: this.changePollStatus },
-	                    'Close Poll'
-	                );
-	            } else {
-	                open = 'closed';
-	                Button = _react2.default.createElement(
-	                    'button',
-	                    { type: 'button', onClick: this.changePollStatus },
-	                    'Open Poll'
-	                );
-	            }'';
+	            var openOrClosed = this.props.getAppState.pollOpen ? 'open' : 'closed';
+
 	            var questions = [];
+
 	            console.log(this.props.getAppState.questions);
 	            for (var i = 0; i < this.props.getAppState.questions.length; i++) {
 	                var questionTemp = _react2.default.createElement(
@@ -57005,10 +56995,13 @@
 	                    _react2.default.createElement(
 	                        'b',
 	                        null,
-	                        open
+	                        openOrClosed
 	                    ),
 	                    '. Click button to change status',
-	                    Button,
+	                    _react2.default.createElement(_pollStatusButton2.default, {
+	                        getAppState: this.props.getAppState,
+	                        setAppState: this.props.setAppState,
+	                        className: 'test' }),
 	                    'Click button to edit poll',
 	                    _react2.default.createElement(
 	                        'button',
@@ -57046,6 +57039,80 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var PollStatusButton = function (_Component) {
+	    _inherits(PollStatusButton, _Component);
+
+	    function PollStatusButton(props) {
+	        _classCallCheck(this, PollStatusButton);
+
+	        var _this = _possibleConstructorReturn(this, (PollStatusButton.__proto__ || Object.getPrototypeOf(PollStatusButton)).call(this, props));
+
+	        _this.changeStatus = _this.changeStatus.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(PollStatusButton, [{
+	        key: 'changeStatus',
+	        value: function changeStatus(e) {
+	            e.preventDefault();
+	            console.log('poll status button firing');
+	            var pollOpen = !this.props.getAppState.pollOpen;
+	            this.props.setAppState({
+	                pollOpen: pollOpen
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var openOrClosed = this.props.getAppState.pollOpen ? "Close poll" : "Open poll";
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'button',
+	                    { type: 'button',
+	                        onClick: this.changeStatus,
+	                        className: 'button poll-status-btn' },
+	                    openOrClosed
+	                )
+	            );
+	        }
+	    }]);
+
+	    return PollStatusButton;
+	}(_react.Component);
+
+	exports.default = PollStatusButton;
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(237); if (makeExportsHot(module, __webpack_require__(65))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "pollStatusButton.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)(module)))
+
+/***/ },
+/* 503 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(2), RootInstanceProvider = __webpack_require__(10), ReactMount = __webpack_require__(12), React = __webpack_require__(65); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(65);
+
+	var _react2 = _interopRequireDefault(_react);
+
 	var _reactRouter = __webpack_require__(170);
 
 	var _createAnswers = __webpack_require__(494);
@@ -57055,6 +57122,10 @@
 	var _jquery = __webpack_require__(234);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _pollStatusButton = __webpack_require__(502);
+
+	var _pollStatusButton2 = _interopRequireDefault(_pollStatusButton);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -57082,16 +57153,31 @@
 	        key: 'updatePoll',
 	        value: function updatePoll(e) {
 	            e.preventDefault();
-	            var questions = [];
+	            var questionsArray = [];
 	            (0, _jquery2.default)('.question-input').each(function () {
-	                if ((0, _jquery2.default)(this).val()) {
-	                    var className = '.' + (0, _jquery2.default)(this).attr("id");
-	                    (0, _jquery2.default)(className).each(function () {
-	                        console.log((0, _jquery2.default)(this).val());
-	                    });
+	                var _this2 = this;
+
+	                var questionFromInput = (0, _jquery2.default)(this).val();
+	                if (questionFromInput) {
+	                    (function () {
+	                        var questionObj = {};
+	                        questionObj.question = (0, _jquery2.default)(_this2).val();
+	                        var className = '.' + (0, _jquery2.default)(_this2).attr("id");
+	                        var answerArr = [];
+	                        (0, _jquery2.default)(className).each(function () {
+	                            answerArr.push({
+	                                answer: (0, _jquery2.default)(this).val(),
+	                                votes: 0
+	                            });
+	                            console.log();
+	                        });
+	                    })();
 	                }
 	            });
-	            var data = {};
+	            var data = {
+	                host: this.state.user
+
+	            };
 	        }
 	    }, {
 	        key: 'buildAnswersArray',
@@ -57173,6 +57259,8 @@
 	        key: 'render',
 	        value: function render() {
 
+	            var openOrClosed = this.props.getAppState.pollOpen ? 'open' : 'closed';
+	            var openCloseButtonVal = this.props.getAppState.pollOpen ? 'Close poll' : 'Open poll';
 	            var questions = this.buildQuestionArray(this.props.getAppState.questions);
 
 	            return _react2.default.createElement(
@@ -57190,11 +57278,38 @@
 	                    'Edit questions below'
 	                ),
 	                questions,
-	                'Click to save poll',
 	                _react2.default.createElement(
-	                    'button',
-	                    { type: 'button', onClick: this.updatePoll },
-	                    'Save poll'
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'h5',
+	                        null,
+	                        'This poll is currently ',
+	                        this.openOrClosed
+	                    ),
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'Click to change poll status'
+	                    ),
+	                    _react2.default.createElement(_pollStatusButton2.default, {
+	                        getAppState: this.props.getAppState,
+	                        setAppState: this.props.setAppState
+	                    })
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'h3',
+	                        null,
+	                        'Click to save poll'
+	                    ),
+	                    _react2.default.createElement(
+	                        'button',
+	                        { type: 'button', onClick: this.updatePoll },
+	                        'Save poll'
+	                    )
 	                )
 	            );
 	        }

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { link, browserHistory } from 'react-router'
 import Answer from './createAnswers'
 import $ from 'jquery'
+import PollStatusButton from './pollStatusButton'
 
 export default class UpdatePoll extends Component {
 
@@ -32,6 +33,9 @@ export default class UpdatePoll extends Component {
             }
         })
         let data = {
+            _id: this.getAppState.pollCode,
+            questions: questionsArray
+
         }
     }
 
@@ -95,6 +99,8 @@ export default class UpdatePoll extends Component {
 
     render() {
 
+        let openOrClosed = this.props.getAppState.pollOpen ? 'open' : 'closed'
+        let openCloseButtonVal = this.props.getAppState.pollOpen ? 'Close poll' : 'Open poll'
         let questions = this.buildQuestionArray(this.props.getAppState.questions)
         
         return (
@@ -102,8 +108,19 @@ export default class UpdatePoll extends Component {
                 <h1>Poll {this.props.getAppState.pollTitle}</h1>
                 <h3>Edit questions below</h3>
                 {questions}
-                Click to save poll 
-                <button type="button" onClick={this.updatePoll}>Save poll</button>
+                <div>
+                    <h5>This poll is currently {openOrClosed}</h5> 
+                    <p>Click to change poll status</p>
+                    <PollStatusButton
+                    getAppState={this.props.getAppState}
+                    setAppState={this.props.setAppState}
+                    ></PollStatusButton>
+                </div>
+                <div>
+                    <h4>Click to save poll</h4>
+                    <button type="button" onClick={this.updatePoll}>Save poll</button>
+                </div>
+                
             </div>
         )
     }
