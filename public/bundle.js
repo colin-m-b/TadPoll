@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "cd035d3d878742ba8b2f"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "7eaf13c8c2fdc623dbd0"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -26559,10 +26559,10 @@
 	        url: "http://localhost:8080/savePoll",
 	        method: "POST",
 	        data: data,
-	        success: function (x) {
+	        success: function (responseFromServer) {
 	          this.setAppState({
-	            pollCode: x.code,
-	            pollOpen: x.open,
+	            pollCode: responseFromServer.code,
+	            pollOpen: responseFromServer.open,
 	            quesNum: 1
 	          });
 	          _reactRouter.browserHistory.push('/completedPoll');
@@ -56026,6 +56026,14 @@
 	    key: 'render',
 	    value: function render() {
 	      var user = this.props.getAppState.user;
+	      var pollInputJSX = _react2.default.createElement(_pollinput2.default, {
+	        setAppState: this.props.setAppState,
+	        getAppState: this.props.getAppState });
+	      var questionJSX = _react2.default.createElement(_question2.default, {
+	        getAppState: this.props.getAppState,
+	        setAppState: this.props.setAppState,
+	        addQuestion: this.props.addQuestion,
+	        savePoll: this.props.savePoll });
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -56050,12 +56058,8 @@
 	            'Create a poll below'
 	          )
 	        ),
-	        this.props.getAppState.showCreatePollInput ? _react2.default.createElement(_pollinput2.default, { setAppState: this.props.setAppState, getAppState: this.props.getAppState }) : null,
-	        this.props.getAppState.showQuestion ? _react2.default.createElement(_question2.default, {
-	          getAppState: this.props.getAppState,
-	          setAppState: this.props.setAppState,
-	          addQuestion: this.props.addQuestion,
-	          savePoll: this.props.savePoll }) : null
+	        this.props.getAppState.showCreatePollInput ? pollInputJSX : null,
+	        this.props.getAppState.showQuestion ? questionJSX : null
 	      );
 	    }
 	  }]);
@@ -57146,6 +57150,8 @@
 	        _this.updatePoll = _this.updatePoll.bind(_this);
 	        _this.buildAnswersArray = _this.buildAnswersArray.bind(_this);
 	        _this.buildQuestionArray = _this.buildQuestionArray.bind(_this);
+	        _this.buildDataForUpdate = _this.buildDataForUpdate.bind(_this);
+	        _this.updateQuestions = _this.updateQuestions.bind(_this);
 	        return _this;
 	    }
 
@@ -57153,31 +57159,63 @@
 	        key: 'updatePoll',
 	        value: function updatePoll(e) {
 	            e.preventDefault();
+	            console.log('firing update');
+	            var data = this.buildDataForUpdate();
+	            console.log(data);
+	            _jquery2.default.ajax({
+	                url: "http://localhost:8080/updateOldPoll",
+	                method: "PUT",
+	                data: data,
+	                success: function (updatedPollStatus) {
+	                    console.log(updatedPollStatus);
+	                }.bind(this)
+	            });
+	        }
+	    }, {
+	        key: 'buildDataForUpdate',
+	        value: function buildDataForUpdate() {
+	            var questions = this.updateQuestions();
+
+	            var dataForUpdate = {
+	                _id: this.props.getAppState.pollCode,
+	                host: this.props.getAppState.user,
+	                title: this.props.getAppState.pollTitle,
+	                questions: questions,
+	                open: this.props.getAppState.pollOpen,
+	                created_at: Date.now()
+	            };
+	            return dataForUpdate;
+	        }
+	    }, {
+	        key: 'updateQuestions',
+	        value: function updateQuestions() {
 	            var questionsArray = [];
 	            (0, _jquery2.default)('.question-input').each(function () {
 	                var _this2 = this;
 
-	                var questionFromInput = (0, _jquery2.default)(this).val();
-	                if (questionFromInput) {
+	                if ((0, _jquery2.default)(this).val()) {
 	                    (function () {
+	                        console.log('val: ', (0, _jquery2.default)(_this2).val());
 	                        var questionObj = {};
 	                        questionObj.question = (0, _jquery2.default)(_this2).val();
 	                        var className = '.' + (0, _jquery2.default)(_this2).attr("id");
 	                        var answerArr = [];
 	                        (0, _jquery2.default)(className).each(function () {
-	                            answerArr.push({
+	                            if ((0, _jquery2.default)(this).val()) answerArr.push({
 	                                answer: (0, _jquery2.default)(this).val(),
 	                                votes: 0
 	                            });
-	                            console.log();
 	                        });
+	                        questionObj.answers = answerArr;
+	                        questionsArray.push(questionObj);
 	                    })();
 	                }
 	            });
-	            var data = {
-	                host: this.state.user
-
-	            };
+	            console.log(questionsArray[0]);
+	            this.props.setAppState({
+	                questions: questionsArray
+	            });
+	            return questionsArray;
 	        }
 	    }, {
 	        key: 'buildAnswersArray',
@@ -57285,7 +57323,7 @@
 	                        'h5',
 	                        null,
 	                        'This poll is currently ',
-	                        this.openOrClosed
+	                        openOrClosed
 	                    ),
 	                    _react2.default.createElement(
 	                        'p',
@@ -57301,14 +57339,14 @@
 	                    'div',
 	                    null,
 	                    _react2.default.createElement(
-	                        'h3',
+	                        'h4',
 	                        null,
 	                        'Click to save poll'
 	                    ),
 	                    _react2.default.createElement(
 	                        'button',
 	                        { type: 'button', onClick: this.updatePoll },
-	                        'Save poll'
+	                        'Update poll'
 	                    )
 	                )
 	            );

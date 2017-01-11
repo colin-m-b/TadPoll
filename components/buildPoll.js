@@ -27,6 +27,18 @@ export default class MakeQuestion extends Component {
 
   render() {
     const user = this.props.getAppState.user
+    const pollInputJSX = (
+      <PollInput 
+        setAppState={this.props.setAppState} 
+        getAppState={this.props.getAppState}/>
+    )
+    const questionJSX = (
+      <Question 
+        getAppState={this.props.getAppState} 
+        setAppState={this.props.setAppState}
+        addQuestion={this.props.addQuestion}
+        savePoll={this.props.savePoll}/>
+    )
     return(
       <div>
         <div>
@@ -35,14 +47,8 @@ export default class MakeQuestion extends Component {
           <hr/>
           <h3>Create a poll below</h3>
         </div>
-          {this.props.getAppState.showCreatePollInput ? <PollInput setAppState={this.props.setAppState} getAppState={this.props.getAppState}/> : null}
-          { this.props.getAppState.showQuestion ? 
-            <Question 
-            getAppState={this.props.getAppState} 
-            setAppState={this.props.setAppState}
-            addQuestion={this.props.addQuestion}
-            savePoll={this.props.savePoll}/> 
-            : null}
+          {this.props.getAppState.showCreatePollInput ? pollInputJSX : null}
+          {this.props.getAppState.showQuestion ? questionJSX : null}
       </div>
       );
 

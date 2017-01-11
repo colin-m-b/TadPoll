@@ -16,7 +16,6 @@ export default class PollStatusButton extends Component {
         })
     }
 
-
     render() {
         let openOrClosed = this.props.getAppState.pollOpen ? "Close poll" : "Open poll"
         return (

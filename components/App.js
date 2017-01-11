@@ -41,10 +41,10 @@ export default class App extends Component {
       url: "http://localhost:8080/savePoll",
       method: "POST",
       data: data,
-      success: function(x) {
+      success: function(responseFromServer) {
         this.setAppState({
-          pollCode: x.code,
-          pollOpen: x.open,
+          pollCode: responseFromServer.code,
+          pollOpen: responseFromServer.open,
           quesNum: 1
         })
         browserHistory.push('/completedPoll')

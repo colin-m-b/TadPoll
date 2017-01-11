@@ -39,8 +39,6 @@ dbMethods.verifyHost = function(req, res) {
 
 // Mongodb CRUD Operations for POLLS
 
-
-
 dbMethods.savePoll= function(req, res) {
   const pollStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
   let pollCode = ''
@@ -93,12 +91,12 @@ dbMethods.returnPollInstance = function(req, res) {
 };
 
 dbMethods.updatePoll = function(req, res) {
-  console.log(req.body)
+  console.log('firing update')
   const id = req.body._id;
-  Poll.findByIdAndUpdate({_id: id}, req.body, {new: true}, (err, newPoll) => {
+  Poll.findByIdAndUpdate({_id: id}, req.body, {new: true}, (err, updatedPoll) => {
     if (err) console.log('err! ' + err)
-    console.log(newPoll)
-    res.send(newPoll.open)
+    console.log(updatedPoll.questions)
+    res.send(updatedPoll.open)
   });
 };
 

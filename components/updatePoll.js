@@ -11,32 +11,65 @@ export default class UpdatePoll extends Component {
         this.updatePoll = this.updatePoll.bind(this)
         this.buildAnswersArray = this.buildAnswersArray.bind(this)
         this.buildQuestionArray = this.buildQuestionArray.bind(this)
+        this.buildDataForUpdate = this.buildDataForUpdate.bind(this)
+        this.updateQuestions = this.updateQuestions.bind(this)
     }
 
     updatePoll(e) {
         e.preventDefault()
+        console.log('firing update')
+        let data = this.buildDataForUpdate()
+        console.log(data)
+        $.ajax({
+            url: "http://localhost:8080/updateOldPoll",
+            method: "PUT",
+            data: data,
+            success: function(updatedPollStatus) {
+                console.log(updatedPollStatus)
+            }.bind(this)
+        })
+    }
+
+    buildDataForUpdate() {
+        let questions = this.updateQuestions()
+
+        let dataForUpdate = {
+            _id: this.props.getAppState.pollCode,
+            host: this.props.getAppState.user,
+            title: this.props.getAppState.pollTitle,
+            questions: questions,
+            open: this.props.getAppState.pollOpen,
+            created_at: Date.now()
+        }   
+        return dataForUpdate
+    }
+
+    updateQuestions() {
         let questionsArray = []
         $('.question-input').each(function() {
-            let questionFromInput = $(this).val()
-            if (questionFromInput) {
+            if ($(this).val()) {
+                console.log('val: ', $(this).val())
                 let questionObj = {}
                 questionObj.question = $(this).val()
                 let className = '.' + $(this).attr("id")
                 let answerArr = []
                 $(className).each(function(){
+                    if($(this).val())
                     answerArr.push({
                         answer: $(this).val(),
                         votes: 0
                     })
-                    console.log()
                 })
+                questionObj.answers = answerArr
+                questionsArray.push(questionObj)
             }
+            
         })
-        let data = {
-            _id: this.getAppState.pollCode,
+        console.log(questionsArray[0])
+        this.props.setAppState({
             questions: questionsArray
-
-        }
+        })
+        return questionsArray
     }
 
     buildAnswersArray(answers, index) {
@@ -118,7 +151,7 @@ export default class UpdatePoll extends Component {
                 </div>
                 <div>
                     <h4>Click to save poll</h4>
-                    <button type="button" onClick={this.updatePoll}>Save poll</button>
+                    <button type="button" onClick={this.updatePoll}>Update poll</button>
                 </div>
                 
             </div>
