@@ -1,37 +1,40 @@
 import React, { Component } from 'react'
 import { link, browserHistory } from 'react-router'
-import Answer from './createAnswers'
 import $ from 'jquery'
+import Answer from './createAnswers'
 import PollStatusButton from './pollStatusButton'
 
 export default class UpdatePoll extends Component {
 
     constructor(props) {
         super(props)
+
         this.updatePoll = this.updatePoll.bind(this)
-        this.buildAnswersArray = this.buildAnswersArray.bind(this)
-        this.buildQuestionArray = this.buildQuestionArray.bind(this)
+        this.buildRenderAnswers = this.buildRenderAnswers.bind(this)
+        this.buildRenderQuestions = this.buildRenderQuestions.bind(this)
         this.buildDataForUpdate = this.buildDataForUpdate.bind(this)
-        this.updateQuestions = this.updateQuestions.bind(this)
+        this.buildUpdateQuestions = this.buildUpdateQuestions.bind(this)
+        this.buildUpdateAnswers = this.buildUpdateAnswers.bind(this)
     }
 
     updatePoll(e) {
         e.preventDefault()
-        console.log('firing update')
+
         let data = this.buildDataForUpdate()
-        console.log(data)
+
         $.ajax({
             url: "http://localhost:8080/updateOldPoll",
             method: "PUT",
             data: data,
             success: function(updatedPollStatus) {
-                console.log(updatedPollStatus)
+                browserHistory.push('/accessPolls')
             }.bind(this)
         })
+        browserHistory.push('/completedPoll')
     }
 
     buildDataForUpdate() {
-        let questions = this.updateQuestions()
+        let questions = this.buildUpdateQuestions()
 
         let dataForUpdate = {
             _id: this.props.getAppState.pollCode,
@@ -44,35 +47,41 @@ export default class UpdatePoll extends Component {
         return dataForUpdate
     }
 
-    updateQuestions() {
+    buildUpdateQuestions() {
+        console.log(typeof this.buildUpdateAnswers)
+        let buildUpdateAnswers = this.buildUpdateAnswers
         let questionsArray = []
         $('.question-input').each(function() {
             if ($(this).val()) {
-                console.log('val: ', $(this).val())
                 let questionObj = {}
                 questionObj.question = $(this).val()
                 let className = '.' + $(this).attr("id")
-                let answerArr = []
-                $(className).each(function(){
-                    if($(this).val())
-                    answerArr.push({
-                        answer: $(this).val(),
-                        votes: 0
-                    })
-                })
-                questionObj.answers = answerArr
+                let answers = buildUpdateAnswers(className)
+                console.log(answers)
+                console.log(typeof buildUpdateAnswers)
+                questionObj.answers = buildUpdateAnswers(className)
                 questionsArray.push(questionObj)
             }
-            
         })
-        console.log(questionsArray[0])
         this.props.setAppState({
             questions: questionsArray
         })
         return questionsArray
     }
 
-    buildAnswersArray(answers, index) {
+    buildUpdateAnswers(className) {
+        let answerArr = []
+        $(className).each(function(){
+            if ($(this).val())
+            answerArr.push({
+                answer: $(this).val(),
+                votes: 0
+            })
+        })
+        return answerArr
+    }
+
+    buildRenderAnswers(answers, index) {
         let answerArray = []
         for (let i = 0; i < 4; i++) {
             let answerValue = ''
@@ -88,17 +97,16 @@ export default class UpdatePoll extends Component {
         return answerArray
     }
 
-    buildQuestionArray(questionObj) {
-        console.log('questionObj: ' + questionObj)
+    buildRenderQuestions(questionObj) {
         let questionArray = []
         let answers
         for (let i = 0; i < 10; i++) {
             let questionValue = ''
             if (questionObj[i]) {
                 questionValue = questionObj[i].question
-                answers = this.buildAnswersArray(questionObj[i].answers, i)
+                answers = this.buildRenderAnswers(questionObj[i].answers, i)
             }else{
-                answers = this.buildAnswersArray([], i)
+                answers = this.buildRenderAnswers([], i)
             }
 
             //create unique keys
@@ -134,7 +142,7 @@ export default class UpdatePoll extends Component {
 
         let openOrClosed = this.props.getAppState.pollOpen ? 'open' : 'closed'
         let openCloseButtonVal = this.props.getAppState.pollOpen ? 'Close poll' : 'Open poll'
-        let questions = this.buildQuestionArray(this.props.getAppState.questions)
+        let questions = this.buildRenderQuestions(this.props.getAppState.questions)
         
         return (
             <div>

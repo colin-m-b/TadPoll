@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "7eaf13c8c2fdc623dbd0"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "3f4ac16b5175141b69ba"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -56930,22 +56930,17 @@
 
 	            console.log(this.props.getAppState.questions);
 	            for (var i = 0; i < this.props.getAppState.questions.length; i++) {
+	                console.log(this.props.getAppState.questions[i]);
 	                var questionTemp = _react2.default.createElement(
 	                    'td',
 	                    { key: i },
 	                    this.props.getAppState.questions[i].question
 	                );
 	                var answers = [];
-	                for (var j = 0; j < this.props.getAppState.questions[i].answers.length; j++) {
-	                    var answerTemp = _react2.default.createElement(
-	                        'li',
-	                        { key: i + j },
-	                        this.props.getAppState.questions[i].answers[j].answer,
-	                        ', votes: ',
-	                        this.props.getAppState.questions[i].answers[j].votes
-	                    );
-	                    answers.push(answerTemp);
-	                }
+	                // for (let j = 0; j < this.props.getAppState.questions[i].answers.length; j++) {
+	                //     let answerTemp = (<li key={i + j}>{this.props.getAppState.questions[i].answers[j].answer}, votes: {this.props.getAppState.questions[i].answers[j].votes}</li>)
+	                //     answers.push(answerTemp)
+	                // }
 	                questions.push(_react2.default.createElement(
 	                    'tr',
 	                    { key: i },
@@ -57111,6 +57106,8 @@
 	    value: true
 	});
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(65);
@@ -57119,13 +57116,13 @@
 
 	var _reactRouter = __webpack_require__(170);
 
-	var _createAnswers = __webpack_require__(494);
-
-	var _createAnswers2 = _interopRequireDefault(_createAnswers);
-
 	var _jquery = __webpack_require__(234);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _createAnswers = __webpack_require__(494);
+
+	var _createAnswers2 = _interopRequireDefault(_createAnswers);
 
 	var _pollStatusButton = __webpack_require__(502);
 
@@ -57148,10 +57145,11 @@
 	        var _this = _possibleConstructorReturn(this, (UpdatePoll.__proto__ || Object.getPrototypeOf(UpdatePoll)).call(this, props));
 
 	        _this.updatePoll = _this.updatePoll.bind(_this);
-	        _this.buildAnswersArray = _this.buildAnswersArray.bind(_this);
-	        _this.buildQuestionArray = _this.buildQuestionArray.bind(_this);
+	        _this.buildRenderAnswers = _this.buildRenderAnswers.bind(_this);
+	        _this.buildRenderQuestions = _this.buildRenderQuestions.bind(_this);
 	        _this.buildDataForUpdate = _this.buildDataForUpdate.bind(_this);
-	        _this.updateQuestions = _this.updateQuestions.bind(_this);
+	        _this.buildUpdateQuestions = _this.buildUpdateQuestions.bind(_this);
+	        _this.buildUpdateAnswers = _this.buildUpdateAnswers.bind(_this);
 	        return _this;
 	    }
 
@@ -57159,22 +57157,23 @@
 	        key: 'updatePoll',
 	        value: function updatePoll(e) {
 	            e.preventDefault();
-	            console.log('firing update');
+
 	            var data = this.buildDataForUpdate();
-	            console.log(data);
+
 	            _jquery2.default.ajax({
 	                url: "http://localhost:8080/updateOldPoll",
 	                method: "PUT",
 	                data: data,
 	                success: function (updatedPollStatus) {
-	                    console.log(updatedPollStatus);
+	                    _reactRouter.browserHistory.push('/accessPolls');
 	                }.bind(this)
 	            });
+	            _reactRouter.browserHistory.push('/completedPoll');
 	        }
 	    }, {
 	        key: 'buildDataForUpdate',
 	        value: function buildDataForUpdate() {
-	            var questions = this.updateQuestions();
+	            var questions = this.buildUpdateQuestions();
 
 	            var dataForUpdate = {
 	                _id: this.props.getAppState.pollCode,
@@ -57187,39 +57186,43 @@
 	            return dataForUpdate;
 	        }
 	    }, {
-	        key: 'updateQuestions',
-	        value: function updateQuestions() {
+	        key: 'buildUpdateQuestions',
+	        value: function buildUpdateQuestions() {
+	            console.log(_typeof(this.buildUpdateAnswers));
+	            var buildUpdateAnswers = this.buildUpdateAnswers;
 	            var questionsArray = [];
 	            (0, _jquery2.default)('.question-input').each(function () {
-	                var _this2 = this;
-
 	                if ((0, _jquery2.default)(this).val()) {
-	                    (function () {
-	                        console.log('val: ', (0, _jquery2.default)(_this2).val());
-	                        var questionObj = {};
-	                        questionObj.question = (0, _jquery2.default)(_this2).val();
-	                        var className = '.' + (0, _jquery2.default)(_this2).attr("id");
-	                        var answerArr = [];
-	                        (0, _jquery2.default)(className).each(function () {
-	                            if ((0, _jquery2.default)(this).val()) answerArr.push({
-	                                answer: (0, _jquery2.default)(this).val(),
-	                                votes: 0
-	                            });
-	                        });
-	                        questionObj.answers = answerArr;
-	                        questionsArray.push(questionObj);
-	                    })();
+	                    var questionObj = {};
+	                    questionObj.question = (0, _jquery2.default)(this).val();
+	                    var className = '.' + (0, _jquery2.default)(this).attr("id");
+	                    var answers = buildUpdateAnswers(className);
+	                    console.log(answers);
+	                    console.log(typeof buildUpdateAnswers === 'undefined' ? 'undefined' : _typeof(buildUpdateAnswers));
+	                    questionObj.answers = buildUpdateAnswers(className);
+	                    questionsArray.push(questionObj);
 	                }
 	            });
-	            console.log(questionsArray[0]);
 	            this.props.setAppState({
 	                questions: questionsArray
 	            });
 	            return questionsArray;
 	        }
 	    }, {
-	        key: 'buildAnswersArray',
-	        value: function buildAnswersArray(answers, index) {
+	        key: 'buildUpdateAnswers',
+	        value: function buildUpdateAnswers(className) {
+	            var answerArr = [];
+	            (0, _jquery2.default)(className).each(function () {
+	                if ((0, _jquery2.default)(this).val()) answerArr.push({
+	                    answer: (0, _jquery2.default)(this).val(),
+	                    votes: 0
+	                });
+	            });
+	            return answerArr;
+	        }
+	    }, {
+	        key: 'buildRenderAnswers',
+	        value: function buildRenderAnswers(answers, index) {
 	            var answerArray = [];
 	            for (var i = 0; i < 4; i++) {
 	                var answerValue = '';
@@ -57240,18 +57243,17 @@
 	            return answerArray;
 	        }
 	    }, {
-	        key: 'buildQuestionArray',
-	        value: function buildQuestionArray(questionObj) {
-	            console.log('questionObj: ' + questionObj);
+	        key: 'buildRenderQuestions',
+	        value: function buildRenderQuestions(questionObj) {
 	            var questionArray = [];
 	            var answers = void 0;
 	            for (var i = 0; i < 10; i++) {
 	                var questionValue = '';
 	                if (questionObj[i]) {
 	                    questionValue = questionObj[i].question;
-	                    answers = this.buildAnswersArray(questionObj[i].answers, i);
+	                    answers = this.buildRenderAnswers(questionObj[i].answers, i);
 	                } else {
-	                    answers = this.buildAnswersArray([], i);
+	                    answers = this.buildRenderAnswers([], i);
 	                }
 
 	                //create unique keys
@@ -57299,7 +57301,7 @@
 
 	            var openOrClosed = this.props.getAppState.pollOpen ? 'open' : 'closed';
 	            var openCloseButtonVal = this.props.getAppState.pollOpen ? 'Close poll' : 'Open poll';
-	            var questions = this.buildQuestionArray(this.props.getAppState.questions);
+	            var questions = this.buildRenderQuestions(this.props.getAppState.questions);
 
 	            return _react2.default.createElement(
 	                'div',

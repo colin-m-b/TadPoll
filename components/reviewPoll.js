@@ -62,12 +62,15 @@ export default class ReviewPoll extends Component {
 
         console.log(this.props.getAppState.questions)
         for (let i = 0; i < this.props.getAppState.questions.length; i++) {
-            let questionTemp = (<td key={i}>{this.props.getAppState.questions[i].question}</td>)
+            console.log(this.props.getAppState.questions[i])
+            let questionTemp = (
+                <td key={i}>{this.props.getAppState.questions[i].question}</td>
+                )
             let answers = []
-            for (let j = 0; j < this.props.getAppState.questions[i].answers.length; j++) {
-                let answerTemp = (<li key={i + j}>{this.props.getAppState.questions[i].answers[j].answer}, votes: {this.props.getAppState.questions[i].answers[j].votes}</li>)
-                answers.push(answerTemp)
-            }
+            // for (let j = 0; j < this.props.getAppState.questions[i].answers.length; j++) {
+            //     let answerTemp = (<li key={i + j}>{this.props.getAppState.questions[i].answers[j].answer}, votes: {this.props.getAppState.questions[i].answers[j].votes}</li>)
+            //     answers.push(answerTemp)
+            // }
             questions.push(<tr key={i}>{questionTemp}<td><ol>{answers}</ol></td></tr>)
         }
         return (
