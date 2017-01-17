@@ -48,8 +48,7 @@ export default class UpdatePoll extends Component {
     }
 
     buildUpdateQuestions() {
-        console.log(typeof this.buildUpdateAnswers)
-        let buildUpdateAnswers = this.buildUpdateAnswers
+
         let questionsArray = []
         $('.question-input').each(function() {
             if ($(this).val()) {
@@ -57,8 +56,6 @@ export default class UpdatePoll extends Component {
                 questionObj.question = $(this).val()
                 let className = '.' + $(this).attr("id")
                 let answers = buildUpdateAnswers(className)
-                console.log(answers)
-                console.log(typeof buildUpdateAnswers)
                 questionObj.answers = buildUpdateAnswers(className)
                 questionsArray.push(questionObj)
             }
