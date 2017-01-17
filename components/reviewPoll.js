@@ -8,6 +8,7 @@ export default class ReviewPoll extends Component {
         super(props)
         this.changePollStatus = this.changePollStatus.bind(this)
         this.editPoll = this.editPoll.bind(this)
+        this.buildQuestionsArray = this.buildQuestionsArray.bind(this)
     }
 
     componentDidMount() {
@@ -30,6 +31,30 @@ export default class ReviewPoll extends Component {
         })
     }
 
+    buildQuestionsArray() {
+
+        let questions = []
+
+        for (let i = 0; i < this.props.getAppState.questions.length; i++) {
+            console.log(this.props.getAppState.questions[i])
+            let questionTemp = (
+                <td key={i}>{this.props.getAppState.questions[i].question}</td>
+                )
+
+        let answers = []
+
+        for (let j = 0; j < this.props.getAppState.questions[i].answers.length; j++) {
+            let answerTemp = (<li key={i + j}>{this.props.getAppState.questions[i].answers[j].answer}, votes: {this.props.getAppState.questions[i].answers[j].votes}</li>)
+            answers.push(answerTemp)
+        }
+        questions.push(
+            <tr key={i}>{questionTemp}
+                <td><ol>{answers}</ol></td>
+            </tr>)
+        }
+        return questions
+    }
+
     changePollStatus(e) {
         e.preventDefault()
         let data = {
@@ -37,7 +62,7 @@ export default class ReviewPoll extends Component {
             _id: this.props.getAppState.pollCode
         }
         $.ajax({
-            url: 'http://localhost:8080/updatePoll',
+            url: 'http://localhost:8080/updatePollInDB',
             method: "PUT",
             data: data,
             success: function(x) {
@@ -58,21 +83,7 @@ export default class ReviewPoll extends Component {
     render() {
         let openOrClosed = this.props.getAppState.pollOpen ? 'open' : 'closed'
 
-        let questions = []
-
-        console.log(this.props.getAppState.questions)
-        for (let i = 0; i < this.props.getAppState.questions.length; i++) {
-            console.log(this.props.getAppState.questions[i])
-            let questionTemp = (
-                <td key={i}>{this.props.getAppState.questions[i].question}</td>
-                )
-            let answers = []
-            // for (let j = 0; j < this.props.getAppState.questions[i].answers.length; j++) {
-            //     let answerTemp = (<li key={i + j}>{this.props.getAppState.questions[i].answers[j].answer}, votes: {this.props.getAppState.questions[i].answers[j].votes}</li>)
-            //     answers.push(answerTemp)
-            // }
-            questions.push(<tr key={i}>{questionTemp}<td><ol>{answers}</ol></td></tr>)
-        }
+        
         return (
             <div>
                 <table style={{verticalAlign: "top"}}>

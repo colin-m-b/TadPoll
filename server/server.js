@@ -32,7 +32,7 @@ app.get('/getPollByUser', dbMethods.getPollByUser)
 
 app.get('/getPoll', dbMethods.getPollByCode);
 
-app.put('/updateOldPoll', dbMethods.updatePoll);
+app.put('/updatePollInDB', dbMethods.updatePoll);
 
 app.post('/deletePoll/:id',  dbMethods.deletePollInstance);
 

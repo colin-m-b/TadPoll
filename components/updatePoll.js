@@ -23,14 +23,13 @@ export default class UpdatePoll extends Component {
         let data = this.buildDataForUpdate()
 
         $.ajax({
-            url: "http://localhost:8080/updateOldPoll",
+            url: "http://localhost:8080/updatePollInDB",
             method: "PUT",
             data: data,
             success: function(updatedPollStatus) {
-                browserHistory.push('/accessPolls')
+                browserHistory.push('/completedPoll')
             }.bind(this)
         })
-        browserHistory.push('/completedPoll')
     }
 
     buildDataForUpdate() {
