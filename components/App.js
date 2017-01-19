@@ -17,7 +17,8 @@ export default class App extends Component {
       quesNum: 1,
       codeBuilder: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
       codeArr: [],
-      showCreatePollInput: true
+      showCreatePollInput: true,
+      deleteModalOpen: false
     }
     this.createAccount = this.createAccount.bind(this)
     this.goAdmin = this.goAdmin.bind(this)

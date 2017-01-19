@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link, browserHistory } from 'react-router'
+import Modal from 'react-modal'
 import $ from 'jquery'
 import PollStatusButton from './pollStatusButton'
 
@@ -9,6 +10,9 @@ export default class ReviewPoll extends Component {
         this.changePollStatus = this.changePollStatus.bind(this)
         this.editPoll = this.editPoll.bind(this)
         this.buildQuestionsArray = this.buildQuestionsArray.bind(this)
+        this.openDeleteModal = this.openDeleteModal.bind(this)
+        this.closeModal = this.closeModal.bind(this)
+        this.deletePoll = this.deletePoll.bind(this)
     }
 
     componentDidMount() {
@@ -19,7 +23,6 @@ export default class ReviewPoll extends Component {
                 _id: this.props.params.poll
             },
             success: function(data) {
-                console.log(Array.isArray(data), data[0].questions)
                 this.props.setAppState({
                     pollTitle: data[0].title,
                     questions: data[0].questions,
@@ -74,16 +77,57 @@ export default class ReviewPoll extends Component {
         })
     }
 
+    deletePoll(e) {
+        e.preventDefault()
+        let data = {
+            _id: this.props.getAppState.pollCode
+        }
+
+        $.ajax({
+            url: 'http://localhost:8080/deletePoll',
+            data: data,
+            method: "DELETE",
+            success: function(data) {
+                browserHistory.push('/accessPolls')
+            }
+        })
+    }
+
     editPoll(e) {
         e.preventDefault()
-        console.log(e)
         browserHistory.push(`/updatePoll`)
     }
 
-    render() {
-        let openOrClosed = this.props.getAppState.pollOpen ? 'open' : 'closed'
+    openDeleteModal(e) {
+        e.preventDefault()
+        console.log('modal open clicked')
+        this.props.setAppState({
+            deleteModalOpen: true
+        })
+    }
 
+    closeModal(e) {
+        e.preventDefault()
+        this.props.setAppState({
+            deleteModalOpen: false
+        })
+    }
+
+    render() {
+
+        const customStyles = {
+            content : {
+                top                   : '50%',
+                left                  : '50%',
+                right                 : 'auto',
+                bottom                : 'auto',
+                marginRight           : '-50%',
+                transform             : 'translate(-50%, -50%)'
+            }
+            };
         
+        let openOrClosed = this.props.getAppState.pollOpen ? 'open' : 'closed'
+        let questions = this.buildQuestionsArray
         return (
             <div>
                 <table style={{verticalAlign: "top"}}>
@@ -107,8 +151,20 @@ export default class ReviewPoll extends Component {
                 setAppState={this.props.setAppState}
                 className="test">
                 </PollStatusButton>
-                Click button to edit poll
                 <button type="submit" onClick={this.editPoll}>Edit Poll</button>
+                <button type="submit" onClick={this.openDeleteModal}>Delete Poll</button>
+                <Modal
+                isOpen={this.props.getAppState.deleteModalOpen}
+                onRequestClose={this.closeModal}
+                contentLabel="Delete Poll"
+                //style={customStyles}
+                >
+                    <h3>Are you sure you want to delete this poll?</h3>
+                    <p>{this.props.getAppState.pollTitle}</p>
+                    <p>{this.props.getAppState.pollCode}</p>
+                    <button type="submit" onClick={this.deletePoll}>Delete Poll</button>
+                    <button type="submit" onClick={this.closeModal}>Cancel</button>
+                </Modal>
                 </div>
             </div>
         )

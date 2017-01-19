@@ -69,6 +69,7 @@
     "react-bootstrap-validation": "^0.1.11",
     "react-dom": "^0.14.0",
     "react-easy-chart": "^0.1.4",
+    "react-modal": "^1.6.5",
     "react-router": "^2.8.1",
     "socket.io": "^1.4.8",
     "vinyl-source-stream": "^1.1.0"

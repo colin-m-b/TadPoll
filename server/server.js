@@ -34,7 +34,7 @@ app.get('/getPoll', dbMethods.getPollByCode);
 
 app.put('/updatePollInDB', dbMethods.updatePoll);
 
-app.post('/deletePoll/:id',  dbMethods.deletePollInstance);
+app.delete('/deletePoll',  dbMethods.deletePollInstance);
 
 app.get('*',function (req, res) {
         res.redirect('/');

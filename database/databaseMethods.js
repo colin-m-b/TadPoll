@@ -101,7 +101,7 @@ dbMethods.updatePoll = function(req, res) {
 };
 
 dbMethods.deletePollInstance = function(req, res) {
-  const id = req.params.id;
+  const id = req.body._id;
   Poll.findByIdAndRemove(id, (err, deletedPoll) => {
     if (err) res.send(err);
     else res.send(true)
