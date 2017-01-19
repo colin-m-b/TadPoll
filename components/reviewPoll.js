@@ -60,10 +60,12 @@ export default class ReviewPoll extends Component {
 
     changePollStatus(e) {
         e.preventDefault()
+
         let data = {
             open: (!this.props.getAppState.pollOpen),
             _id: this.props.getAppState.pollCode
         }
+
         $.ajax({
             url: 'http://localhost:8080/updatePollInDB',
             method: "PUT",
@@ -79,6 +81,7 @@ export default class ReviewPoll extends Component {
 
     deletePoll(e) {
         e.preventDefault()
+
         let data = {
             _id: this.props.getAppState.pollCode
         }
@@ -95,12 +98,14 @@ export default class ReviewPoll extends Component {
 
     editPoll(e) {
         e.preventDefault()
+
         browserHistory.push(`/updatePoll`)
     }
 
     openDeleteModal(e) {
+
         e.preventDefault()
-        console.log('modal open clicked')
+
         this.props.setAppState({
             deleteModalOpen: true
         })
@@ -108,6 +113,7 @@ export default class ReviewPoll extends Component {
 
     closeModal(e) {
         e.preventDefault()
+
         this.props.setAppState({
             deleteModalOpen: false
         })
