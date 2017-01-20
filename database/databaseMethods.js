@@ -9,6 +9,7 @@ db.once('open', () => {
   console.log('Mongodb connected');
 });
 
+//initialize methods object
 const dbMethods = {};
 
 dbMethods.createHost = (req, res) => {
@@ -19,14 +20,9 @@ dbMethods.createHost = (req, res) => {
   });
 };
 
-
 dbMethods.verifyHost = function(req, res) {
-  console.log('body: ' + req.body.userName)
-  // fetch user and test password verification
   Host.findOne({ userName: req.body.userName }, 'password', (err, user) => {
       if (err) throw err;
-      console.log('finding USER' + user)
-      // test a matching password
       if (user) {
       bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
           if (err) throw err;
@@ -40,13 +36,14 @@ dbMethods.verifyHost = function(req, res) {
 // Mongodb CRUD Operations for POLLS
 
 dbMethods.savePoll= function(req, res) {
-  const pollStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+  const pollStr = "abcdefghijklmnopqrstuvwxyz0123456789"
+
   let pollCode = ''
     for (let i = 0; i < 4; i++) {
       let pos = Math.floor(Math.random() * pollStr.length)
       pollCode += pollStr[pos]
     }
-    console.log(pollCode)
+
   const poll = new Poll({
     _id: pollCode,
     host: req.body.host,
@@ -55,8 +52,8 @@ dbMethods.savePoll= function(req, res) {
     open: req.body.open,
     created_at: Date.now()
   });
+
   poll.save(function(err, pollData) {
-    console.log('saving poll')
     if (err) return console.error('Error! ' + err);
     res.send({
       code: poll._id,
@@ -66,7 +63,6 @@ dbMethods.savePoll= function(req, res) {
 };
 
 dbMethods.getPollByUser = function(req, res) {
-  console.log('finding by user', req.query.host)
   Poll.find({host: req.query.host}, {_id: 1, title: 1}, function(err, data) {
     if (err) res.send(err)
     if (!data) res.send(false)
@@ -91,7 +87,6 @@ dbMethods.returnPollInstance = function(req, res) {
 };
 
 dbMethods.updatePoll = function(req, res) {
-  console.log('firing update')
   const id = req.body._id;
   Poll.findByIdAndUpdate({_id: id}, req.body, {new: true}, (err, updatedPoll) => {
     if (err) console.log('err! ' + err)

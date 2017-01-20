@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const pollSchema = new Schema({
   _id: String,
   host: String,
-  title: String,
+  title: {type: String, unique: true},
   questions: Array,
   open: Boolean,
   created_at: Date,
