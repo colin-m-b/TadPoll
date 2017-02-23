@@ -8,6 +8,9 @@ db.on('error', console.error);
 db.once('open', () => {
   console.log('Mongodb connected');
 });
+//DB Atlas pw: J@ckandjake123
+
+//mongodb://Colin:<PASSWORD>@m123-rs1-shard-00-00-xb5dt.mongodb.net:27017,m123-rs1-shard-00-01-xb5dt.mongodb.net:27017,m123-rs1-shard-00-02-xb5dt.mongodb.net:27017/<DATABASE>?ssl=true&replicaSet=m123-rs1-shard-0&authSource=admin
 
 //initialize methods object\
 const dbMethods = {};
@@ -16,7 +19,7 @@ dbMethods.createHost = (req, res) => {
   const host = new Host(req.body);
   host.save((err, hostData) => {
     if (err) return console.error('Error! ' + err);
-    res.send('saved!');
+    res.send(true);
   });
 };
 
@@ -24,9 +27,9 @@ dbMethods.verifyHost = function(req, res) {
   Host.findOne({ userName: req.body.userName }, 'password', (err, user) => {
       if (err) throw err;
       if (user) {
-      bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
+      bcrypt.compare(req.body.password, user.password, (err, match) => {
           if (err) throw err;
-          res.send(isMatch);
+          res.send(match);
       });
       }
       else res.send(false)
@@ -35,16 +38,21 @@ dbMethods.verifyHost = function(req, res) {
 
 // Mongodb CRUD Operations for POLLS
 
-dbMethods.savePoll= function(req, res) {
-  const pollStr = "abcdefghijklmnopqrstuvwxyz0123456789"
-
-  let pollCode = ''
+dbMethods.generatePollCode = function() {
+    const pollStr = "abcdefghijklmnopqrstuvwxyz0123456789"
+    let pollCode = ''
     for (let i = 0; i < 4; i++) {
       let pos = Math.floor(Math.random() * pollStr.length)
       pollCode += pollStr[pos]
     }
+    return pollCode
+}
 
-  const poll = new Poll({
+dbMethods.makeNewPoll = function(req, res) {
+
+    const pollCode = dbMethods.generatePollCode()
+
+    const poll = new Poll({
     _id: pollCode,
     host: req.body.host,
     title: req.body.title,
@@ -52,6 +60,12 @@ dbMethods.savePoll= function(req, res) {
     open: req.body.open,
     created_at: Date.now()
   });
+  return poll
+}
+
+dbMethods.savePoll= function(req, res) {
+
+  const poll = dbMethods.makeNewPoll(req, res)
 
   poll.save(function(err, pollData) {
     if (err) return console.error('Error! ' + err);
