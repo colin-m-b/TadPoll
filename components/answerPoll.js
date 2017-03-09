@@ -9,7 +9,6 @@ export default class AnswerPoll extends Component {
         this.buildAnswers = this.buildAnswers.bind(this)
     }
 
-
     buildAnswers() {
         const answerArray = []
         console.log(this.props.getAppState.userQuestions)

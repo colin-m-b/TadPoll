@@ -12,7 +12,7 @@ export default class Home extends Component {
         return (
             <div>
                 <Link to="/login">Click here to create poll</Link>
-                <Link to="/answer">Click here to answer poll</Link>
+                <Link to="/enterPollCode">Click here to answer poll</Link>
             </div>
         )
     }

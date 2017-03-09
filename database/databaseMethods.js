@@ -85,6 +85,7 @@ dbMethods.getPollByUser = function(req, res) {
 }
 
 dbMethods.getPollByCode = function(req, res) {
+  console.log('getPollByCode firing')
   Poll.find({_id: req.query._id}, {_id: 1, title: 1, questions: 1, open: 1}, function(err, data) {
     if (err) res.send(err)
     if (!data) res.send(false)

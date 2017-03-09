@@ -17,17 +17,17 @@ export default class AnswerPage extends Component {
     }
 
     componentDidMount() {
-        resetUserInputCode()
+        this.resetUserInputCode()
     }
 
     getPoll(e) {
         e.preventDefault()
-        resetUserInputCode()
+        this.resetUserInputCode()
 
         const code = $('input').val()
 
         $.ajax({
-            url: 'http://localhost:8000/getPoll',
+            url: 'http://localhost:8080/getPoll',
             method: 'GET',
             data: {
                 _id: code
@@ -51,7 +51,7 @@ export default class AnswerPage extends Component {
                     })
                     browserHistory.push('/answerPoll')
                 }
-            }
+            }.bind(this)
         })
     }
 
@@ -67,3 +67,4 @@ export default class AnswerPage extends Component {
     }
 
 }
+//	de6p

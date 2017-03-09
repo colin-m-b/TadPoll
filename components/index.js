@@ -12,6 +12,7 @@ import AccessPolls from './accessPolls'
 import CompletedPoll from './completedPoll'
 import ReviewPoll from './reviewPoll'
 import UpdatePoll from './updatePoll'
+import EnterPollCode from './enterPollCode'
 
 export default class Index extends Component{
     constructor(props) {
@@ -23,6 +24,7 @@ export default class Index extends Component{
                 <Route path='/' component={App} >
                 <IndexRoute component={Home} />
                     <Route path='/login' component={Login} />
+                    <Route path='/enterPollCode' component={EnterPollCode} />
                     <Route path='/answer' component={AnswerPoll} />  
                     <Route path='/createAccount' component={CreateAccount} />  
                     <Route path='/makePoll' component={BuildPoll} />

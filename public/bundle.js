@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "fb8e5701bf7069478618"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "7f2aca7889f1bddb669f"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -647,6 +647,10 @@
 
 	var _updatePoll2 = _interopRequireDefault(_updatePoll);
 
+	var _enterPollCode = __webpack_require__(515);
+
+	var _enterPollCode2 = _interopRequireDefault(_enterPollCode);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -675,6 +679,7 @@
 	                    { path: '/', component: _App2.default },
 	                    _react2.default.createElement(_reactRouter.IndexRoute, { component: _home2.default }),
 	                    _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _login2.default }),
+	                    _react2.default.createElement(_reactRouter.Route, { path: '/enterPollCode', component: _enterPollCode2.default }),
 	                    _react2.default.createElement(_reactRouter.Route, { path: '/answer', component: _answerPoll2.default }),
 	                    _react2.default.createElement(_reactRouter.Route, { path: '/createAccount', component: _createAccount2.default }),
 	                    _react2.default.createElement(_reactRouter.Route, { path: '/makePoll', component: _BuildPoll2.default }),
@@ -36935,7 +36940,7 @@
 	                ),
 	                _react2.default.createElement(
 	                    _reactRouter.Link,
-	                    { to: '/answer' },
+	                    { to: '/enterPollCode' },
 	                    'Click here to answer poll'
 	                )
 	            );
@@ -67010,8 +67015,9 @@
 	    _createClass(CompletePoll, [{
 	        key: 'render',
 	        value: function render() {
-	            var open = '';
-	            this.props.getAppState.pollOpen ? open = "open" : open = "closed";
+
+	            var openOrClosed = this.props.getAppState.pollOpen ? "open" : "closed";
+
 	            return _react2.default.createElement(
 	                'div',
 	                null,
@@ -67028,7 +67034,7 @@
 	                    'p',
 	                    null,
 	                    'This poll is ',
-	                    open
+	                    openOrClosed
 	                ),
 	                _react2.default.createElement(
 	                    _reactRouter.Link,
@@ -69011,6 +69017,126 @@
 	exports.default = UpdatePoll;
 
 	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(237); if (makeExportsHot(module, __webpack_require__(65))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "updatePoll.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)(module)))
+
+/***/ },
+/* 515 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(2), RootInstanceProvider = __webpack_require__(10), ReactMount = __webpack_require__(12), React = __webpack_require__(65); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(65);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(170);
+
+	var _jquery = __webpack_require__(234);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AnswerPage = function (_Component) {
+	    _inherits(AnswerPage, _Component);
+
+	    function AnswerPage(props) {
+	        _classCallCheck(this, AnswerPage);
+
+	        var _this = _possibleConstructorReturn(this, (AnswerPage.__proto__ || Object.getPrototypeOf(AnswerPage)).call(this, props));
+
+	        _this.getPoll = _this.getPoll.bind(_this);
+	        _this.resetUserInputCode = _this.resetUserInputCode.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(AnswerPage, [{
+	        key: 'resetUserInputCode',
+	        value: function resetUserInputCode() {
+	            this.props.setAppState({
+	                badCode: false,
+	                userAccessingClosedPoll: false
+	            });
+	        }
+	    }, {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            this.resetUserInputCode();
+	        }
+	    }, {
+	        key: 'getPoll',
+	        value: function getPoll(e) {
+	            e.preventDefault();
+	            this.resetUserInputCode();
+
+	            var code = (0, _jquery2.default)('input').val();
+
+	            _jquery2.default.ajax({
+	                url: 'http://localhost:8080/getPoll',
+	                method: 'GET',
+	                data: {
+	                    _id: code
+	                },
+	                success: function (data) {
+	                    if (!data) {
+	                        this.props.setAppState({
+	                            badCode: true
+	                        });
+	                    } else if (data === 'closed') {
+	                        this.props.setAppState({
+	                            userAccessingClosedPoll: true
+	                        });
+	                    } else {
+	                        this.props.setAppState({
+	                            userPollCode: code,
+	                            userPollTitle: data.title,
+	                            userQuestions: data.userQuestions
+	                        });
+	                        _reactRouter.browserHistory.push('/answerPoll');
+	                    }
+	                }.bind(this)
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'form',
+	                    { onSubmit: this.getPoll },
+	                    _react2.default.createElement(
+	                        'label',
+	                        null,
+	                        'Enter 4-digit code here'
+	                    ),
+	                    _react2.default.createElement('input', { size: '4', id: 'code' })
+	                )
+	            );
+	        }
+	    }]);
+
+	    return AnswerPage;
+	}(_react.Component);
+
+	exports.default = AnswerPage;
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(237); if (makeExportsHot(module, __webpack_require__(65))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "enterPollCode.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)(module)))
 
 /***/ }
