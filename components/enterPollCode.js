@@ -34,22 +34,25 @@ export default class AnswerPage extends Component {
             },
             success: function(data) {
                 if (!data) {
+                    
                     this.props.setAppState({
                         badCode: true
                     })
                 }
                 else if(data === 'closed') {
+                    console.log('closed')
                     this.props.setAppState({
                         userAccessingClosedPoll: true
                     })
                 }
                 else {
+                    console.log('success')
                     this.props.setAppState({
                         userPollCode: code,
                         userPollTitle: data.title,
                         userQuestions: data.userQuestions
                     })
-                    browserHistory.push('/answerPoll')
+                    browserHistory.push('/answer')
                 }
             }.bind(this)
         })

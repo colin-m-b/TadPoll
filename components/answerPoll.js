@@ -12,6 +12,17 @@ export default class AnswerPoll extends Component {
     buildAnswers() {
         const answerArray = []
         console.log(this.props.getAppState.userQuestions)
-        this.props.getAppState.userQuestions.answers.forEach()
+        this.props.getAppState.userQuestions.answers.forEach(function(ans, i) {
+            answerArray.push(
+                <form>
+                    <p>Answer {i + 1}: {ans}</p>
+                    <button>Answr {i + 1}</button>
+                </form>
+            )
+        })
+    }
+
+    render() {
+        return <h1>hi</h1>
     }
 }

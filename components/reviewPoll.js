@@ -81,11 +81,11 @@ export default class ReviewPoll extends Component {
 
     deletePoll(e) {
         e.preventDefault()
-
+        console.log(this.props.params.poll)
         let data = {
-            _id: this.props.getAppState.pollCode
+            _id: this.props.params.poll
         }
-
+        console.log(data)
         $.ajax({
             url: 'http://localhost:8080/deletePoll',
             data: data,
@@ -130,7 +130,9 @@ export default class ReviewPoll extends Component {
                 marginRight           : '-50%',
                 transform             : 'translate(-50%, -50%)'
             }
-            };
+        };
+        
+        
         
         let openOrClosed = this.props.getAppState.pollOpen ? 'open' : 'closed'
         let questions = this.buildQuestionsArray
@@ -153,16 +155,16 @@ export default class ReviewPoll extends Component {
                 <div>
                 This poll is <b>{openOrClosed}</b>. Click button to change status
                 <PollStatusButton 
-                getAppState={this.props.getAppState} 
-                setAppState={this.props.setAppState}
-                className="test">
+                    getAppState={this.props.getAppState} 
+                    setAppState={this.props.setAppState}
+                    className="test">
                 </PollStatusButton>
                 <button type="submit" onClick={this.editPoll}>Edit Poll</button>
                 <button type="submit" onClick={this.openDeleteModal}>Delete Poll</button>
                 <Modal
-                isOpen={this.props.getAppState.deleteModalOpen}
-                onRequestClose={this.closeModal}
-                contentLabel="Delete Poll"
+                    isOpen={this.props.getAppState.deleteModalOpen}
+                    onRequestClose={this.closeModal}
+                    contentLabel="Delete Poll"
                 //style={customStyles}
                 >
                     <h3>Are you sure you want to delete this poll?</h3>

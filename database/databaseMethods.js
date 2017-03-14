@@ -89,7 +89,6 @@ dbMethods.getPollByCode = function(req, res) {
   Poll.find({_id: req.query._id}, {_id: 1, title: 1, questions: 1, open: 1}, function(err, data) {
     if (err) res.send(err)
     if (!data) res.send(false)
-    if (!data.open) res.send('closed')
     else res.send(data)
   })
 }
@@ -113,7 +112,9 @@ dbMethods.updatePoll = function(req, res) {
 
 dbMethods.deletePollInstance = function(req, res) {
   const id = req.body._id;
+  console.log(id)
   Poll.findByIdAndRemove(id, (err, deletedPoll) => {
+    console.log('deleting poll', deletedPoll)
     if (err) res.send(err);
     else res.send(true)
   });

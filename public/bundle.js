@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "7f2aca7889f1bddb669f"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "3cc5983d083132df33c6"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -56452,7 +56452,35 @@
 	        value: function buildAnswers() {
 	            var answerArray = [];
 	            console.log(this.props.getAppState.userQuestions);
-	            this.props.getAppState.userQuestions.answers.forEach();
+	            this.props.getAppState.userQuestions.answers.forEach(function (ans, i) {
+	                answerArray.push(_react2.default.createElement(
+	                    'form',
+	                    null,
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'Answer ',
+	                        i + 1,
+	                        ': ',
+	                        ans
+	                    ),
+	                    _react2.default.createElement(
+	                        'button',
+	                        null,
+	                        'Answr ',
+	                        i + 1
+	                    )
+	                ));
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'h1',
+	                null,
+	                'hi'
+	            );
 	        }
 	    }]);
 
@@ -67120,6 +67148,7 @@
 	                    _id: this.props.params.poll
 	                },
 	                success: function (data) {
+	                    console.log('data', data);
 	                    this.props.setAppState({
 	                        pollTitle: data[0].title,
 	                        questions: data[0].questions,
@@ -67199,11 +67228,11 @@
 	        key: 'deletePoll',
 	        value: function deletePoll(e) {
 	            e.preventDefault();
-
+	            console.log(this.props.params.poll);
 	            var data = {
-	                _id: this.props.getAppState.pollCode
+	                _id: this.props.params.poll
 	            };
-
+	            console.log(data);
 	            _jquery2.default.ajax({
 	                url: 'http://localhost:8080/deletePoll',
 	                data: data,
@@ -69093,20 +69122,23 @@
 	                },
 	                success: function (data) {
 	                    if (!data) {
+
 	                        this.props.setAppState({
 	                            badCode: true
 	                        });
 	                    } else if (data === 'closed') {
+	                        console.log('closed');
 	                        this.props.setAppState({
 	                            userAccessingClosedPoll: true
 	                        });
 	                    } else {
+	                        console.log('success');
 	                        this.props.setAppState({
 	                            userPollCode: code,
 	                            userPollTitle: data.title,
 	                            userQuestions: data.userQuestions
 	                        });
-	                        _reactRouter.browserHistory.push('/answerPoll');
+	                        _reactRouter.browserHistory.push('/answer');
 	                    }
 	                }.bind(this)
 	            });
@@ -69133,6 +69165,8 @@
 
 	    return AnswerPage;
 	}(_react.Component);
+	//	de6p
+
 
 	exports.default = AnswerPage;
 
