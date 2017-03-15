@@ -17,8 +17,8 @@ export default class PollInput extends Component {
     }
 
     render() {
-        let title = ""
-        if (this.props.getAppState.pollTitle) title = this.props.getAppState.pollTitle
+        let title = this.props.getAppState.pollTitle ? "" : this.props.getAppState.pollTitle
+
         return (
             <div>
                 

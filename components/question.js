@@ -47,7 +47,6 @@ export default class Question extends Component {
 
   render() {
     let questionNum = this.props.getAppState.quesNum - 1
-    console.log("quesnum: " + questionNum)
     let value
     let answers = []
     if (this.props.getAppState.questions[questionNum]){
