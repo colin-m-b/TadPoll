@@ -34,7 +34,6 @@ export default class AnswerPage extends Component {
             },
             success: function(data) {
                 if (!data) {
-                    
                     this.props.setAppState({
                         badCode: true
                     })
@@ -64,6 +63,7 @@ export default class AnswerPage extends Component {
                 <form onSubmit={this.getPoll}>
                     <label>Enter 4-digit code here</label>
                     <input size="4" id="code" />
+                    <button type="submit">Click to enter code</button>
                 </form>
             </div>
         )

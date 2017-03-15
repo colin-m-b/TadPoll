@@ -35,13 +35,6 @@ export default class AccessPolls extends Component {
     }
 
     render() {
-        let userPolls = this.props.getAppState.userPolls
-        let userPollTitles = []
-        let userPollCodes = []
-        for (let i = 0; i < userPolls.length; i++) {
-            userPollTitles.push(<TableRow 
-            key={i} code={userPolls[i]._id} title={userPolls[i].title}></TableRow>)
-        }
 
         return(
             <div>
@@ -54,7 +47,11 @@ export default class AccessPolls extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {userPollTitles}
+                        {this.props.getAppState.userPolls.map((x, i) => (
+                            <TableRow 
+                            key={i} code={x._id} title={x.title}>
+                            </TableRow>)
+                        )}
                         {userPollCodes}
                     </tbody>
                 </table>

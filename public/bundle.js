@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "3cc5983d083132df33c6"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "8eb0cc339b03c39b842a"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -67044,8 +67044,6 @@
 	        key: 'render',
 	        value: function render() {
 
-	            var openOrClosed = this.props.getAppState.pollOpen ? "open" : "closed";
-
 	            return _react2.default.createElement(
 	                'div',
 	                null,
@@ -67062,7 +67060,7 @@
 	                    'p',
 	                    null,
 	                    'This poll is ',
-	                    openOrClosed
+	                    this.props.getAppState.pollOpen ? "open" : "closed"
 	                ),
 	                _react2.default.createElement(
 	                    _reactRouter.Link,
@@ -67148,7 +67146,6 @@
 	                    _id: this.props.params.poll
 	                },
 	                success: function (data) {
-	                    console.log('data', data);
 	                    this.props.setAppState({
 	                        pollTitle: data[0].title,
 	                        questions: data[0].questions,

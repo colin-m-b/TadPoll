@@ -10,7 +10,6 @@ export default class AnswerPoll extends Component {
     }
 
     buildAnswers() {
-        const answerArray = []
         console.log(this.props.getAppState.userQuestions)
         this.props.getAppState.userQuestions.answers.forEach(function(ans, i) {
             answerArray.push(
