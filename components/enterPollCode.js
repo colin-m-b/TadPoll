@@ -11,6 +11,7 @@ export default class AnswerPage extends Component {
 
     resetUserInputCode() {
         this.props.setAppState({
+            userPollCode: '',
             badCode: false,
             userAccessingClosedPoll: false
         })
@@ -32,7 +33,7 @@ export default class AnswerPage extends Component {
             data: {
                 _id: code
             },
-            success: function(data) {
+            success: data => {
                 if (!data) {
                     this.props.setAppState({
                         badCode: true
@@ -51,9 +52,10 @@ export default class AnswerPage extends Component {
                         userPollTitle: data.title,
                         userQuestions: data.userQuestions
                     })
+
                     browserHistory.push('/answer')
                 }
-            }.bind(this)
+            }
         })
     }
 

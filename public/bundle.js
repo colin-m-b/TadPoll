@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "8eb0cc339b03c39b842a"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "9088a687f9e316577509"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -56169,7 +56169,6 @@
 	    key: 'render',
 	    value: function render() {
 	      var questionNum = this.props.getAppState.quesNum - 1;
-	      console.log("quesnum: " + questionNum);
 	      var value = void 0;
 	      var answers = [];
 	      if (this.props.getAppState.questions[questionNum]) {
@@ -56371,8 +56370,8 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var title = "";
-	            if (this.props.getAppState.pollTitle) title = this.props.getAppState.pollTitle;
+	            var title = this.props.getAppState.pollTitle ? "" : this.props.getAppState.pollTitle;
+
 	            return _react2.default.createElement(
 	                'div',
 	                null,
@@ -56450,7 +56449,6 @@
 	    _createClass(AnswerPoll, [{
 	        key: 'buildAnswers',
 	        value: function buildAnswers() {
-	            var answerArray = [];
 	            console.log(this.props.getAppState.userQuestions);
 	            this.props.getAppState.userQuestions.answers.forEach(function (ans, i) {
 	                answerArray.push(_react2.default.createElement(
@@ -66849,6 +66847,8 @@
 	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
+	            var _this2 = this;
+
 	            var data = {
 	                host: this.props.getAppState.user
 	            };
@@ -66857,23 +66857,16 @@
 	                url: "http://localhost:8080/getPollByUser",
 	                method: "GET",
 	                data: data,
-	                success: function (data) {
-	                    this.props.setAppState({
+	                success: function success(data) {
+	                    _this2.props.setAppState({
 	                        userPolls: data
 	                    });
-	                }.bind(this)
+	                }
 	            });
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var userPolls = this.props.getAppState.userPolls;
-	            var userPollTitles = [];
-	            var userPollCodes = [];
-	            for (var i = 0; i < userPolls.length; i++) {
-	                userPollTitles.push(_react2.default.createElement(_tableRows2.default, {
-	                    key: i, code: userPolls[i]._id, title: userPolls[i].title }));
-	            }
 
 	            return _react2.default.createElement(
 	                'div',
@@ -66908,8 +66901,10 @@
 	                    _react2.default.createElement(
 	                        'tbody',
 	                        null,
-	                        userPollTitles,
-	                        userPollCodes
+	                        this.props.getAppState.userPolls.map(function (x, i) {
+	                            return _react2.default.createElement(_tableRows2.default, {
+	                                key: i, code: x._id, title: x.title });
+	                        })
 	                    )
 	                )
 	            );
@@ -69094,6 +69089,7 @@
 	        key: 'resetUserInputCode',
 	        value: function resetUserInputCode() {
 	            this.props.setAppState({
+	                userPollCode: '',
 	                badCode: false,
 	                userAccessingClosedPoll: false
 	            });
@@ -69106,6 +69102,8 @@
 	    }, {
 	        key: 'getPoll',
 	        value: function getPoll(e) {
+	            var _this2 = this;
+
 	            e.preventDefault();
 	            this.resetUserInputCode();
 
@@ -69117,27 +69115,27 @@
 	                data: {
 	                    _id: code
 	                },
-	                success: function (data) {
+	                success: function success(data) {
 	                    if (!data) {
-
-	                        this.props.setAppState({
+	                        _this2.props.setAppState({
 	                            badCode: true
 	                        });
 	                    } else if (data === 'closed') {
 	                        console.log('closed');
-	                        this.props.setAppState({
+	                        _this2.props.setAppState({
 	                            userAccessingClosedPoll: true
 	                        });
 	                    } else {
 	                        console.log('success');
-	                        this.props.setAppState({
+	                        _this2.props.setAppState({
 	                            userPollCode: code,
 	                            userPollTitle: data.title,
 	                            userQuestions: data.userQuestions
 	                        });
+
 	                        _reactRouter.browserHistory.push('/answer');
 	                    }
-	                }.bind(this)
+	                }
 	            });
 	        }
 	    }, {
@@ -69154,7 +69152,12 @@
 	                        null,
 	                        'Enter 4-digit code here'
 	                    ),
-	                    _react2.default.createElement('input', { size: '4', id: 'code' })
+	                    _react2.default.createElement('input', { size: '4', id: 'code' }),
+	                    _react2.default.createElement(
+	                        'button',
+	                        { type: 'submit' },
+	                        'Click to enter code'
+	                    )
 	                )
 	            );
 	        }

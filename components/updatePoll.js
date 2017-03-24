@@ -41,7 +41,7 @@ export default class UpdatePoll extends Component {
             title: this.props.getAppState.pollTitle,
             questions: questions,
             open: this.props.getAppState.pollOpen,
-            created_at: Date.now()
+            updated_at: Date.now()
         }   
         return dataForUpdate
     }
@@ -51,11 +51,11 @@ export default class UpdatePoll extends Component {
         let questionsArray = []
         $('.question-input').each(function() {
             if ($(this).val()) {
-                let questionObj = {}
-                questionObj.question = $(this).val()
                 let className = '.' + $(this).attr("id")
-                let answers = buildUpdateAnswers(className)
-                questionObj.answers = buildUpdateAnswers(className)
+                let questionObj = {
+                    question: $(this).val(),
+                    answers: buildUpdateAnswers(className)
+                }
                 questionsArray.push(questionObj)
             }
         })

@@ -25,12 +25,12 @@ export default class AccessPolls extends Component {
             url: "http://localhost:8080/getPollByUser",
             method: "GET",
             data: data,
-            success: function(data) {
+            success: data => {
                 this.props.setAppState({
                     userPolls: data
                 })
 
-            }.bind(this)
+            }
         })
     }
 
@@ -52,7 +52,7 @@ export default class AccessPolls extends Component {
                             key={i} code={x._id} title={x.title}>
                             </TableRow>)
                         )}
-                        {userPollCodes}
+                        
                     </tbody>
                 </table>
             </div>

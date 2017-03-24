@@ -26,7 +26,7 @@ export default class MakeQuestion extends Component {
   }
 
   render() {
-    const user = this.props.getAppState.user
+    
     const pollInputJSX = (
       <PollInput 
         setAppState={this.props.setAppState} 
