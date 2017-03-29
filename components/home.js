@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
 import { Link, browserHistory } from 'react-router'
-import login from './login'
+import login from './admin/login'
 
 export default class Home extends Component {
     constructor(props) {

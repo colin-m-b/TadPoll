@@ -23,7 +23,7 @@ export default class PollInput extends Component {
             <div>
                 
             <form>
-                <label>Poll TItle (50 characters max)</label>
+                <label>Poll Title (50 characters max)</label>
                 <input type="text" width="50" className='poll-title' id="pollTitle" maxLength="50" defaultValue={title}/>
                 <button type="button" onClick={this.saveTitle}>Save title</button>
             </form>

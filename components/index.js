@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 import ReactDOM, { render } from 'react-dom';
 import { Router, Route, Link, browserHistory, IndexRoute } from 'react-router'
 import App from './App';
-import Login from './login';
-import Signup from './signup';
+import Login from './admin/login';
+import Signup from './admin/signup';
 import Home from './home'
-import BuildPoll from './BuildPoll'
-import AnswerPoll from './answerPoll'
-import CreateAccount from './createAccount'
-import AccessPolls from './accessPolls'
-import CompletedPoll from './completedPoll'
-import ReviewPoll from './reviewPoll'
-import UpdatePoll from './updatePoll'
-import EnterPollCode from './enterPollCode'
+import BuildPoll from './admin/buildPoll'
+import AnswerPoll from './user/answerPoll'
+import CreateAccount from './admin/createAccount'
+import AccessPolls from './admin/accessPolls'
+import CompletedPoll from './admin/completedPoll'
+import ReviewPoll from './admin/reviewPoll'
+import UpdatePoll from './admin/updatePoll'
+import EnterPollCode from './user/enterPollCode'
 
 export default class Index extends Component{
     constructor(props) {

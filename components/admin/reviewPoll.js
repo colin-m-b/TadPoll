@@ -22,7 +22,8 @@ export default class ReviewPoll extends Component {
             data: {
                 _id: this.props.params.poll
             },
-            success: function(data) {
+            success: data => {
+                console.log(data)
                 this.props.setAppState({
                     pollTitle: data[0].title,
                     questions: data[0].questions,
@@ -30,14 +31,26 @@ export default class ReviewPoll extends Component {
                     pollOpen: data[0].open,
                     showQuestion: true
                 })
-            }.bind(this)
+            }
         })
     }
 
     buildQuestionsArray() {
-
-        let questions = []
-
+        return this.props.getAppState.questions.map((questionObj, i) => {
+            console.log(questionObj.answers ? "yes" : "no")
+            let answers = !questionObj.answers ? null : questionObj.answers.map((answerObj, j) => {
+                return (
+                    <li key={i+j}>{answerObj.answer}, votes: {answerObj.votes}</li>
+                )
+            })
+            return (
+                <tr key={i}>
+                    <td key={i}>{questionObj.question}</td>
+                    <td><ol>{answers}</ol></td>
+                </tr>
+                )
+        })
+/*
         for (let i = 0; i < this.props.getAppState.questions.length; i++) {
             console.log(this.props.getAppState.questions[i])
             let questionTemp = (
@@ -54,8 +67,8 @@ export default class ReviewPoll extends Component {
             <tr key={i}>{questionTemp}
                 <td><ol>{answers}</ol></td>
             </tr>)
-        }
-        return questions
+        }*/
+        // return questions
     }
 
     changePollStatus(e) {
@@ -135,7 +148,7 @@ export default class ReviewPoll extends Component {
         
         
         let openOrClosed = this.props.getAppState.pollOpen ? 'open' : 'closed'
-        let questions = this.buildQuestionsArray
+        let questions = this.buildQuestionsArray()
         return (
             <div>
                 <table style={{verticalAlign: "top"}}>

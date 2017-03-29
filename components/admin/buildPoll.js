@@ -3,7 +3,7 @@ import $ from 'jquery'
 import { render } from 'react-dom'
 import { Link, browserHistory } from 'react-router'
 import Question from './question'
-import PollInput from './pollinput'
+import CreatePollTitle from './createPollTitle'
 
 
 export default class MakeQuestion extends Component {
@@ -27,8 +27,8 @@ export default class MakeQuestion extends Component {
 
   render() {
     
-    const pollInputJSX = (
-      <PollInput 
+    const pollTitleJSX = (
+      <CreatePollTitle 
         setAppState={this.props.setAppState} 
         getAppState={this.props.getAppState}/>
     )
@@ -47,7 +47,7 @@ export default class MakeQuestion extends Component {
           <hr/>
           <h3>Create a poll below</h3>
         </div>
-          {this.props.getAppState.showCreatePollInput ? pollInputJSX : null}
+          {this.props.getAppState.showCreatePollInput ? pollTitleJSX : null}
           {this.props.getAppState.showQuestion ? questionJSX : null}
       </div>
       );

@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "9088a687f9e316577509"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "9621f8b55e553090f1ed"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -619,9 +619,9 @@
 
 	var _home2 = _interopRequireDefault(_home);
 
-	var _BuildPoll = __webpack_require__(492);
+	var _buildPoll = __webpack_require__(492);
 
-	var _BuildPoll2 = _interopRequireDefault(_BuildPoll);
+	var _buildPoll2 = _interopRequireDefault(_buildPoll);
 
 	var _answerPoll = __webpack_require__(496);
 
@@ -682,7 +682,7 @@
 	                    _react2.default.createElement(_reactRouter.Route, { path: '/enterPollCode', component: _enterPollCode2.default }),
 	                    _react2.default.createElement(_reactRouter.Route, { path: '/answer', component: _answerPoll2.default }),
 	                    _react2.default.createElement(_reactRouter.Route, { path: '/createAccount', component: _createAccount2.default }),
-	                    _react2.default.createElement(_reactRouter.Route, { path: '/makePoll', component: _BuildPoll2.default }),
+	                    _react2.default.createElement(_reactRouter.Route, { path: '/makePoll', component: _buildPoll2.default }),
 	                    _react2.default.createElement(_reactRouter.Route, { path: '/accessPolls', component: _accessPolls2.default }),
 	                    _react2.default.createElement(_reactRouter.Route, { path: '/completedPoll', component: _completedPoll2.default }),
 	                    _react2.default.createElement(_reactRouter.Route, { path: '/reviewPoll/:poll', component: _reviewPoll2.default }),
@@ -36936,12 +36936,12 @@
 	                _react2.default.createElement(
 	                    _reactRouter.Link,
 	                    { to: '/login' },
-	                    'Click here to create poll'
+	                    'Click here if you\'re creating/editing a poll'
 	                ),
 	                _react2.default.createElement(
 	                    _reactRouter.Link,
 	                    { to: '/enterPollCode' },
-	                    'Click here to answer poll'
+	                    'Click here if you\'re answering a poll'
 	                )
 	            );
 	        }
@@ -55991,9 +55991,9 @@
 
 	var _question2 = _interopRequireDefault(_question);
 
-	var _pollinput = __webpack_require__(495);
+	var _createPollTitle = __webpack_require__(495);
 
-	var _pollinput2 = _interopRequireDefault(_pollinput);
+	var _createPollTitle2 = _interopRequireDefault(_createPollTitle);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -56031,8 +56031,8 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var user = this.props.getAppState.user;
-	      var pollInputJSX = _react2.default.createElement(_pollinput2.default, {
+
+	      var pollTitleJSX = _react2.default.createElement(_createPollTitle2.default, {
 	        setAppState: this.props.setAppState,
 	        getAppState: this.props.getAppState });
 	      var questionJSX = _react2.default.createElement(_question2.default, {
@@ -56064,7 +56064,7 @@
 	            'Create a poll below'
 	          )
 	        ),
-	        this.props.getAppState.showCreatePollInput ? pollInputJSX : null,
+	        this.props.getAppState.showCreatePollInput ? pollTitleJSX : null,
 	        this.props.getAppState.showQuestion ? questionJSX : null
 	      );
 	    }
@@ -56075,7 +56075,7 @@
 
 	exports.default = MakeQuestion;
 
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(237); if (makeExportsHot(module, __webpack_require__(65))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "BuildPoll.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(237); if (makeExportsHot(module, __webpack_require__(65))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "buildPoll.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)(module)))
 
 /***/ },
@@ -56128,13 +56128,6 @@
 	  }
 
 	  _createClass(Question, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      if (this.props.getAppState.pollTitle) this.props.setAppState({
-	        showCreatePollInput: true
-	      });
-	    }
-	  }, {
 	    key: 'editPollTitle',
 	    value: function editPollTitle() {
 	      this.props.setAppState({
@@ -56168,51 +56161,17 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var questionNum = this.props.getAppState.quesNum - 1;
 	      var value = void 0;
 	      var answers = [];
-	      if (this.props.getAppState.questions[questionNum]) {
-	        value = this.props.getAppState.questions[questionNum].question;
-	        console.log("yes " + questionNum + value);
-	        for (var i = 1; i < 5; i++) {
-	          var num = i - 1;
-	          if (this.props.getAppState.questions[questionNum].answers[num]) {
-	            var answer = this.props.getAppState.questions[questionNum].answers[num].answer;
-	            console.log(answer);
-	            answers.push(_react2.default.createElement(
-	              'span',
-	              { key: i },
-	              _react2.default.createElement(
-	                'label',
-	                { key: "key" + i },
-	                'Answer ',
-	                i
-	              ),
-	              _react2.default.createElement('input', { key: questionNum + i, 'data-id': i, defaultValue: answer })
-	            ));
-	          } else answers.push(_react2.default.createElement(
-	            'span',
-	            { key: "key" + i },
-	            _react2.default.createElement(
-	              'label',
-	              { key: "key" + i },
-	              'Answer ',
-	              i
-	            ),
-	            _react2.default.createElement(_createAnswers2.default, { key: questionNum + i, 'data-id': i })
-	          ));
-	        }
-	      } else {
-	        value = "";
-	        for (var _i = 1; _i < 5; _i++) {
-	          answers.push(_react2.default.createElement(
-	            'label',
-	            { key: _i },
-	            'Answer ',
-	            _i,
-	            _react2.default.createElement(_createAnswers2.default, { key: _i, 'data-id': _i })
-	          ));
-	        }
+
+	      for (var i = 1; i < 5; i++) {
+	        answers.push(_react2.default.createElement(
+	          'label',
+	          { key: i },
+	          'Answer ',
+	          i,
+	          _react2.default.createElement(_createAnswers2.default, { key: i, 'data-id': i })
+	        ));
 	      }
 
 	      return _react2.default.createElement(
@@ -56381,7 +56340,7 @@
 	                    _react2.default.createElement(
 	                        'label',
 	                        null,
-	                        'Poll TItle (50 characters max)'
+	                        'Poll Title (50 characters max)'
 	                    ),
 	                    _react2.default.createElement('input', { type: 'text', width: '50', className: 'poll-title', id: 'pollTitle', maxLength: '50', defaultValue: title }),
 	                    _react2.default.createElement(
@@ -56399,7 +56358,7 @@
 
 	exports.default = PollInput;
 
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(237); if (makeExportsHot(module, __webpack_require__(65))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "pollinput.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(237); if (makeExportsHot(module, __webpack_require__(65))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "createPollTitle.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)(module)))
 
 /***/ },
@@ -67134,53 +67093,48 @@
 	    _createClass(ReviewPoll, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
+	            var _this2 = this;
+
 	            _jquery2.default.ajax({
 	                url: 'http://localhost:8080/getPoll',
 	                method: "GET",
 	                data: {
 	                    _id: this.props.params.poll
 	                },
-	                success: function (data) {
-	                    this.props.setAppState({
+	                success: function success(data) {
+	                    console.log(data);
+	                    _this2.props.setAppState({
 	                        pollTitle: data[0].title,
 	                        questions: data[0].questions,
 	                        pollCode: data[0]._id,
 	                        pollOpen: data[0].open,
 	                        showQuestion: true
 	                    });
-	                }.bind(this)
+	                }
 	            });
 	        }
 	    }, {
 	        key: 'buildQuestionsArray',
 	        value: function buildQuestionsArray() {
-
-	            var questions = [];
-
-	            for (var i = 0; i < this.props.getAppState.questions.length; i++) {
-	                console.log(this.props.getAppState.questions[i]);
-	                var questionTemp = _react2.default.createElement(
-	                    'td',
-	                    { key: i },
-	                    this.props.getAppState.questions[i].question
-	                );
-
-	                var answers = [];
-
-	                for (var j = 0; j < this.props.getAppState.questions[i].answers.length; j++) {
-	                    var answerTemp = _react2.default.createElement(
+	            return this.props.getAppState.questions.map(function (questionObj, i) {
+	                console.log(questionObj.answers ? "yes" : "no");
+	                var answers = !questionObj.answers ? null : questionObj.answers.map(function (answerObj, j) {
+	                    return _react2.default.createElement(
 	                        'li',
 	                        { key: i + j },
-	                        this.props.getAppState.questions[i].answers[j].answer,
+	                        answerObj.answer,
 	                        ', votes: ',
-	                        this.props.getAppState.questions[i].answers[j].votes
+	                        answerObj.votes
 	                    );
-	                    answers.push(answerTemp);
-	                }
-	                questions.push(_react2.default.createElement(
+	                });
+	                return _react2.default.createElement(
 	                    'tr',
 	                    { key: i },
-	                    questionTemp,
+	                    _react2.default.createElement(
+	                        'td',
+	                        { key: i },
+	                        questionObj.question
+	                    ),
 	                    _react2.default.createElement(
 	                        'td',
 	                        null,
@@ -67190,9 +67144,27 @@
 	                            answers
 	                        )
 	                    )
-	                ));
-	            }
-	            return questions;
+	                );
+	            });
+	            /*
+	                    for (let i = 0; i < this.props.getAppState.questions.length; i++) {
+	                        console.log(this.props.getAppState.questions[i])
+	                        let questionTemp = (
+	                            <td key={i}>{this.props.getAppState.questions[i].question}</td>
+	                            )
+	            
+	                    let answers = []
+	            
+	                    for (let j = 0; j < this.props.getAppState.questions[i].answers.length; j++) {
+	                        let answerTemp = (<li key={i + j}>{this.props.getAppState.questions[i].answers[j].answer}, votes: {this.props.getAppState.questions[i].answers[j].votes}</li>)
+	                        answers.push(answerTemp)
+	                    }
+	                    questions.push(
+	                        <tr key={i}>{questionTemp}
+	                            <td><ol>{answers}</ol></td>
+	                        </tr>)
+	                    }*/
+	            // return questions
 	        }
 	    }, {
 	        key: 'changePollStatus',
@@ -67276,7 +67248,7 @@
 	            };
 
 	            var openOrClosed = this.props.getAppState.pollOpen ? 'open' : 'closed';
-	            var questions = this.buildQuestionsArray;
+	            var questions = this.buildQuestionsArray();
 	            return _react2.default.createElement(
 	                'div',
 	                null,
@@ -68861,7 +68833,7 @@
 	                title: this.props.getAppState.pollTitle,
 	                questions: questions,
 	                open: this.props.getAppState.pollOpen,
-	                created_at: Date.now()
+	                updated_at: Date.now()
 	            };
 	            return dataForUpdate;
 	        }
@@ -68872,11 +68844,11 @@
 	            var questionsArray = [];
 	            (0, _jquery2.default)('.question-input').each(function () {
 	                if ((0, _jquery2.default)(this).val()) {
-	                    var questionObj = {};
-	                    questionObj.question = (0, _jquery2.default)(this).val();
 	                    var className = '.' + (0, _jquery2.default)(this).attr("id");
-	                    var answers = buildUpdateAnswers(className);
-	                    questionObj.answers = buildUpdateAnswers(className);
+	                    var questionObj = {
+	                        question: (0, _jquery2.default)(this).val(),
+	                        answers: buildUpdateAnswers(className)
+	                    };
 	                    questionsArray.push(questionObj);
 	                }
 	            });
