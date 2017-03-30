@@ -33,24 +33,24 @@ export default class AnswerPage extends Component {
             data: {
                 _id: code
             },
-            success: data => {
-                if (!data) {
+            success: poll => {
+                if (!poll) {
                     this.props.setAppState({
                         badCode: true
                     })
                 }
-                else if(data === 'closed') {
+                else if(poll === 'closed') {
                     console.log('closed')
                     this.props.setAppState({
                         userAccessingClosedPoll: true
                     })
                 }
                 else {
-                    console.log('success')
+                    console.log('success', poll)
                     this.props.setAppState({
                         userPollCode: code,
-                        userPollTitle: data.title,
-                        userQuestions: data.userQuestions
+                        userPollTitle: poll[0].title,
+                        userQuestions: poll[0].questions
                     })
 
                     browserHistory.push('/answer')

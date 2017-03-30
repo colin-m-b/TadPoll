@@ -4,9 +4,6 @@ import { Link, browserHistory } from 'react-router'
 import login from './admin/login'
 
 export default class Home extends Component {
-    constructor(props) {
-        super(props)
-    }
 
     render() {
         return (

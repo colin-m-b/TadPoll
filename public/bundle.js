@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "9621f8b55e553090f1ed"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "4c539c6ad7bccdf57692"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -36921,10 +36921,10 @@
 	var Home = function (_Component) {
 	    _inherits(Home, _Component);
 
-	    function Home(props) {
+	    function Home() {
 	        _classCallCheck(this, Home);
 
-	        return _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).call(this, props));
+	        return _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).apply(this, arguments));
 	    }
 
 	    _createClass(Home, [{
@@ -56399,44 +56399,70 @@
 	    function AnswerPoll(props) {
 	        _classCallCheck(this, AnswerPoll);
 
+	        // this.buildAnswers = this.buildAnswers.bind(this)
 	        var _this = _possibleConstructorReturn(this, (AnswerPoll.__proto__ || Object.getPrototypeOf(AnswerPoll)).call(this, props));
 
-	        _this.buildAnswers = _this.buildAnswers.bind(_this);
+	        _this.buildQuestions = _this.buildQuestions.bind(_this);
 	        return _this;
 	    }
+	    //qu61
+	    /*buildAnswers() {
+	        return this.props.getAppState.userQuestions.answers.map(function(ans, i) {
+	            return (
+	                <form>
+	                    <p>Answer {i + 1}: {ans}</p>
+	                    <button>Answer {i + 1}</button>
+	                </form>
+	            )
+	        })
+	    }*/
 
 	    _createClass(AnswerPoll, [{
-	        key: 'buildAnswers',
-	        value: function buildAnswers() {
+	        key: 'buildQuestions',
+	        value: function buildQuestions() {
 	            console.log(this.props.getAppState.userQuestions);
-	            this.props.getAppState.userQuestions.answers.forEach(function (ans, i) {
-	                answerArray.push(_react2.default.createElement(
-	                    'form',
+	            return this.props.getAppState.userQuestions.map(function (question, i) {
+	                var answers = question.answers.map(function (answer, j) {
+	                    return _react2.default.createElement(
+	                        'form',
+	                        { className: 'answerForm' },
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            answer.answer
+	                        ),
+	                        _react2.default.createElement(
+	                            'button',
+	                            { className: 'answerBtn' },
+	                            'Answer ',
+	                            j + 1
+	                        )
+	                    );
+	                });
+	                return _react2.default.createElement(
+	                    'div',
 	                    null,
 	                    _react2.default.createElement(
 	                        'p',
 	                        null,
-	                        'Answer ',
-	                        i + 1,
-	                        ': ',
-	                        ans
+	                        question.question
 	                    ),
-	                    _react2.default.createElement(
-	                        'button',
-	                        null,
-	                        'Answr ',
-	                        i + 1
-	                    )
-	                ));
+	                    answers
+	                );
 	            });
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
-	                'h1',
+	                'div',
 	                null,
-	                'hi'
+	                _react2.default.createElement(
+	                    'h1',
+	                    null,
+	                    this.props.getAppState.userPollTitle
+	                ),
+	                this.buildQuestions()
 	            );
 	        }
 	    }]);
@@ -69087,22 +69113,22 @@
 	                data: {
 	                    _id: code
 	                },
-	                success: function success(data) {
-	                    if (!data) {
+	                success: function success(poll) {
+	                    if (!poll) {
 	                        _this2.props.setAppState({
 	                            badCode: true
 	                        });
-	                    } else if (data === 'closed') {
+	                    } else if (poll === 'closed') {
 	                        console.log('closed');
 	                        _this2.props.setAppState({
 	                            userAccessingClosedPoll: true
 	                        });
 	                    } else {
-	                        console.log('success');
+	                        console.log('success', poll);
 	                        _this2.props.setAppState({
 	                            userPollCode: code,
-	                            userPollTitle: data.title,
-	                            userQuestions: data.userQuestions
+	                            userPollTitle: poll[0].title,
+	                            userQuestions: poll[0].questions
 	                        });
 
 	                        _reactRouter.browserHistory.push('/answer');
