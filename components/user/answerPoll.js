@@ -6,20 +6,14 @@ export default class AnswerPoll extends Component {
 
     constructor(props) {
         super(props)
-        // this.buildAnswers = this.buildAnswers.bind(this)
         this.buildQuestions = this.buildQuestions.bind(this)
+        this.chooseAnswer = this.chooseAnswer.bind(this)
     }
 //qu61
-    /*buildAnswers() {
-        return this.props.getAppState.userQuestions.answers.map(function(ans, i) {
-            return (
-                <form>
-                    <p>Answer {i + 1}: {ans}</p>
-                    <button>Answer {i + 1}</button>
-                </form>
-            )
-        })
-    }*/
+
+    chooseAnswer = (quesNum, ansNum) => {
+
+    }
 
     buildQuestions() {
         console.log(this.props.getAppState.userQuestions)
@@ -27,8 +21,8 @@ export default class AnswerPoll extends Component {
             let answers = question.answers.map((answer, j) => {
                 return (
                     <form className="answerForm">
-                        <p>{answer.answer}</p>
-                        <button className="answerBtn">Answer {j + 1}</button>
+                        <p key={j}>{answer.answer}</p>
+                        <button className="answerBtn" onClick={this.chooseAnswer(i, j)}>Answer {j + 1}</button>
                     </form>
                 )
             })
