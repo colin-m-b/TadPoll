@@ -11,24 +11,30 @@ export default class AnswerPoll extends Component {
     }
 //qu61
 
-    chooseAnswer = (quesNum, ansNum) => {
-
+    chooseAnswer (e) {
+        e.preventDefault()
+        console.log(e.currentTarget)
     }
 
     buildQuestions() {
         console.log(this.props.getAppState.userQuestions)
         return this.props.getAppState.userQuestions.map((question, i) => {
+            let divKey = "div" + i
             let answers = question.answers.map((answer, j) => {
-                return (
-                    <form className="answerForm">
-                        <p key={j}>{answer.answer}</p>
-                        <button className="answerBtn" onClick={this.chooseAnswer(i, j)}>Answer {j + 1}</button>
+                let btnKey = "btn" + j
+                let pKey = "p" + j
+                let formKey = "form" + j
+                let value = i + "." + j
+                return (  
+                    <form key={formKey} className="answerForm">
+                        <p key={pKey}>Answer {j+ 1}: {answer.answer}</p>
+                        <button key={btnKey} className="answerBtn" value={value} onClick={this.chooseAnswer}>Choose answer {j + 1}</button>
                     </form>
                 )
             })
             return (
-                <div>
-                    <p>{question.question}</p>
+                <div key={divKey}>
+                    <p key={i}>{question.question}</p>
                     {answers}
                 </div>
             )

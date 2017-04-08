@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "4c539c6ad7bccdf57692"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "40391f40247cdfbdd8c2"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -56399,52 +56399,58 @@
 	    function AnswerPoll(props) {
 	        _classCallCheck(this, AnswerPoll);
 
-	        // this.buildAnswers = this.buildAnswers.bind(this)
 	        var _this = _possibleConstructorReturn(this, (AnswerPoll.__proto__ || Object.getPrototypeOf(AnswerPoll)).call(this, props));
 
 	        _this.buildQuestions = _this.buildQuestions.bind(_this);
+	        _this.chooseAnswer = _this.chooseAnswer.bind(_this);
 	        return _this;
 	    }
 	    //qu61
-	    /*buildAnswers() {
-	        return this.props.getAppState.userQuestions.answers.map(function(ans, i) {
-	            return (
-	                <form>
-	                    <p>Answer {i + 1}: {ans}</p>
-	                    <button>Answer {i + 1}</button>
-	                </form>
-	            )
-	        })
-	    }*/
 
 	    _createClass(AnswerPoll, [{
+	        key: 'chooseAnswer',
+	        value: function chooseAnswer(e) {
+	            e.preventDefault();
+	            console.log(e.currentTarget);
+	        }
+	    }, {
 	        key: 'buildQuestions',
 	        value: function buildQuestions() {
+	            var _this2 = this;
+
 	            console.log(this.props.getAppState.userQuestions);
 	            return this.props.getAppState.userQuestions.map(function (question, i) {
+	                var divKey = "div" + i;
 	                var answers = question.answers.map(function (answer, j) {
+	                    var btnKey = "btn" + j;
+	                    var pKey = "p" + j;
+	                    var formKey = "form" + j;
+	                    var value = i + "." + j;
 	                    return _react2.default.createElement(
 	                        'form',
-	                        { className: 'answerForm' },
+	                        { key: formKey, className: 'answerForm' },
 	                        _react2.default.createElement(
 	                            'p',
-	                            null,
+	                            { key: pKey },
+	                            'Answer ',
+	                            j + 1,
+	                            ': ',
 	                            answer.answer
 	                        ),
 	                        _react2.default.createElement(
 	                            'button',
-	                            { className: 'answerBtn' },
-	                            'Answer ',
+	                            { key: btnKey, className: 'answerBtn', value: value, onClick: _this2.chooseAnswer },
+	                            'Choose answer ',
 	                            j + 1
 	                        )
 	                    );
 	                });
 	                return _react2.default.createElement(
 	                    'div',
-	                    null,
+	                    { key: divKey },
 	                    _react2.default.createElement(
 	                        'p',
-	                        null,
+	                        { key: i },
 	                        question.question
 	                    ),
 	                    answers
